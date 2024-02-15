@@ -1,0 +1,18 @@
+:root {
+  --dark-grey: #383c4a;
+  --grey: #404552;
+  --blue: #5294e2;
+  --light-grey: #4b5162;
+  --light: #7c818c;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}

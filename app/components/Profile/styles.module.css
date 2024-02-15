@@ -1,0 +1,75 @@
+.profile {
+  position: fixed;
+}
+
+.mask {
+  width: 100vw;
+  height: calc(100dvh - 56px);
+  position: fixed;
+  top: 56px;
+  left: 0;
+  background-color: var(--grey);
+  z-index: 1;
+}
+
+.profileAsside {
+  width: 80vw;
+  max-width: 400px;
+  height: calc(100dvh - 56px);
+  position: fixed;
+  top: 56px;
+  right: 0;
+  background-color: var(--light-grey);
+  border-left: 4px solid var(--dark-grey);
+  color: white;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  font-family: "Lexend", sans-serif;
+  text-align: center;
+}
+
+.editBtn {
+  cursor: pointer;
+  align-self: flex-end;
+  transition: filter 0.3s 0.1s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .editBtn:hover {
+    filter: drop-shadow(0 0 2px var(--blue));
+  }
+}
+
+.editBtn img {
+  height: 40px;
+  width: 40px;
+}
+
+.profileAsside .profileIcon {
+  height: 120px;
+  width: 120px;
+}
+
+.profileAsside .name {
+  font-size: 24px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.profileAsside .name:after {
+  content: "";
+  display: block;
+  width: 110%;
+  height: 2px;
+  background-color: var(--blue);
+  border-radius: 2px;
+}
+
+.profileAsside *:nth-child(n + 2) {
+  margin-bottom: 18px;
+}

@@ -1,0 +1,35 @@
+.wrapper input:-webkit-autofill,
+.wrapper input:-webkit-autofill:hover,
+.wrapper input:-webkit-autofill:focus,
+.wrapper input:-webkit-autofill:active {
+  background-color: var(--grey) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--grey) inset;
+  -webkit-background-clip: text !important;
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  caret-color: white;
+}
+
+.wrapper input::placeholder {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.wrapper {
+  width: 100%;
+  outline: none;
+  border: none;
+  color: white;
+  background-color: var(--grey);
+}
+
+.wrapper input {
+  color: white;
+  caret-color: white;
+}
+
+.wrapper * {
+  border: none !important;
+  outline: none !important;
+}

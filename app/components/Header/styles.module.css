@@ -1,0 +1,52 @@
+.wrapper {
+  height: 56px;
+  display: flex;
+  background-color: var(--dark-grey);
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  position: fixed;
+  width: calc(100% - 20px);
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: var(--grey);
+  height: 40px;
+  width: 140px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: filter 0.3s 0.1s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logo:hover {
+    filter: drop-shadow(0 0 2px var(--blue));
+  }
+
+  .profileIcon:hover {
+    filter: drop-shadow(0 0 2px var(--blue));
+  }
+}
+
+.logo span {
+  font-family: "Long Cang", cursive;
+  font-size: 48px;
+  line-height: 48px;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 4.8px;
+}
+
+.profileIcon {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  transition: filter 0.3s 0.1s ease;
+}
+
+.profileIconActive {
+  filter: drop-shadow(0 0 1px var(--blue));
+}
