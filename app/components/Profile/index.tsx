@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 import studentProfileIcon from "../../icons/student.svg";
 import editBtn from "../../icons/edit.svg";
 import { AnimatePresence, motion } from "framer-motion";
+import { useStore } from "@/zustand/store";
+import { Link, useLocation } from "@remix-run/react";
 
 export const Profile = ({
   open,
@@ -13,49 +15,13 @@ export const Profile = ({
 }) => {
   const assideRef = useRef<HTMLDivElement>(null!);
 
-  /*
-  const [assideX, setAssideX] = useState(0);
+  const userData = useStore((state) => state.state);
+
+  const location = useLocation();
 
   useEffect(() => {
-    const asside = assideRef.current;
-    let isClicked: boolean = false;
-    let drugStartPoint: number;
-
-    const clickHandler = (event: MouseEvent) => {
-      isClicked = true;
-      drugStartPoint = event.clientX;
-      console.log("click");
-    };
-
-    const upHandler = () => {
-      isClicked = false;
-    };
-
-    const moveHandler = (event: MouseEvent) => {
-      if (isClicked) {
-        setAssideX((prev) => prev + event.movementX);
-        console.log(event.movementX);
-      }
-    };
-
-    if (asside) {
-      asside.addEventListener("mousedown", clickHandler);
-      asside.addEventListener("mouseup", upHandler);
-      asside.addEventListener("mouseleave", upHandler);
-      asside.addEventListener("mousemove", moveHandler);
-    }
-
-    return () => {
-      if (asside) {
-        asside.removeEventListener("mousedown", clickHandler);
-        asside.removeEventListener("mouseup", upHandler);
-        asside.removeEventListener("mouseleave", upHandler);
-        asside.removeEventListener("mousemove", moveHandler);
-      }
-    };
-  }, []);
-
-  */
+    setIsOpen(false);
+  }, [location.pathname]);
 
   return (
     <motion.div ref={assideRef}>
@@ -77,20 +43,36 @@ export const Profile = ({
               transition={{ duration: 0.3 }}
               className={styles.profileAsside}
             >
-              <button className={styles.editBtn}>
-                <img alt="edit btn" src={editBtn} />
-              </button>
-              <img
-                className={styles.profileIcon}
-                src={studentProfileIcon}
-                alt="student profile icon"
-              />
-              <p className={styles.name}>Ткаченко Павло Дмитрович</p>
-              <p className={styles.major}>
-                Автоматизація та компьютерно-інтегровані технології
-              </p>
-              <p className={styles.years}>Роки навчання: 2020 - 2024</p>
-              <p>Студент 4-го курсу</p>
+              {userData ? (
+                <>
+                  <button className={styles.editBtn}>
+                    <img alt="edit btn" src={editBtn} />
+                  </button>
+                  <img
+                    className={styles.profileIcon}
+                    src={studentProfileIcon}
+                    alt="student profile icon"
+                  />
+                  <p
+                    className={styles.name}
+                  >{`${userData.surname} ${userData.name} ${userData.fatherName}`}</p>
+                  <p className={styles.major}>{userData.major}</p>
+                  <p className={styles.years}>
+                    Роки навчання: {userData.courseStart} - {userData.courseEnd}
+                  </p>
+                  <p>
+                    Студент{" "}
+                    {new Date().getFullYear() - Number(userData.courseStart)}-го{" "}
+                    курсу
+                  </p>
+                </>
+              ) : (
+                <div className={styles.login}>
+                  <Link to="/login" className={styles.login__link}>
+                    Увійти до облікового запису
+                  </Link>
+                </div>
+              )}
             </motion.div>
           </>
         )}

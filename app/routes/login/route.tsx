@@ -1,7 +1,9 @@
-import { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import React from "react";
 import { LoginForm } from "@/widgets/Forms/LoginForm";
+import { CredentialsLogin } from "@/services/auth/login.server";
+import { createUserSession } from "@/services/cookie/cookieStorage.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,10 +12,32 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  request.formData().then((data) => console.log(data.entries().next().value));
+type LoginCredentialsType = {
+  email: string;
+  password: string;
+};
 
-  return null;
+const checkIsObjValid = (obj: any): obj is LoginCredentialsType => {
+  return "email" in obj && "password" in obj;
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const data = Object.fromEntries(await request.formData());
+
+  if (!checkIsObjValid(data)) return redirect("/reg");
+
+  const LoginResponse = await CredentialsLogin(data);
+
+  if (
+    !LoginResponse ||
+    LoginResponse.status !== "success" ||
+    !LoginResponse.userId
+  )
+    return redirect("/reg");
+
+  return redirect("/", {
+    headers: await createUserSession(LoginResponse.userId),
+  });
 };
 
 export const loader = () => {

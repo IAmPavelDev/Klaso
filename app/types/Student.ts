@@ -4,8 +4,8 @@ export type Student = {
   name: string;
   surname: string;
   fatherName: string;
-  courseStart: Date;
-  courseEnd: Date;
+  courseStart: string;
+  courseEnd: string;
   classes: Array<string>;
   tasksTodo: Array<string>;
   tasksDone: Array<string>;
@@ -21,8 +21,8 @@ export interface CreateStudentData {
   name: string;
   surname: string;
   fatherName: string;
-  courseStart: Date;
-  courseEnd: Date;
+  courseStart: string;
+  courseEnd: string;
   major: string;
   email: string;
 }

@@ -5,6 +5,7 @@ import {
   Student as StudentType,
 } from "@/types/Student";
 import bcrypt from "bcrypt";
+import { FilterQuery, MongooseQueryOptions } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
 const StudentSchema = new mongoose.Schema<StudentType>({
@@ -14,8 +15,8 @@ const StudentSchema = new mongoose.Schema<StudentType>({
   surname: String,
   fatherName: String,
   email: String,
-  courseStart: Date,
-  courseEnd: Date,
+  courseStart: String,
+  courseEnd: String,
   classes: [String],
   major: String,
   tasksTodo: [String],
@@ -39,6 +40,17 @@ class Student {
   model: mongoose.Model<StudentType>;
   constructor(model: mongoose.Model<StudentType>) {
     this.model = model;
+  }
+
+  async verifyPassword(
+    query: FilterQuery<StudentOmitPwd>,
+    password: string
+  ): Promise<boolean> {
+    const user = await this.model.findOne(query).lean();
+
+    if (!user) return false;
+
+    return bcrypt.compare(password, user.password);
   }
 
   async getStudentByEmail(email: string): Promise<StudentOmitPwd | undefined> {

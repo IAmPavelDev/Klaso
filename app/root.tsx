@@ -1,5 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -7,12 +7,18 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  json,
+  useLoaderData,
 } from "@remix-run/react";
 import globalStyles from "./styles/global.css";
 import resetCss from "./styles/reset.css";
 import { Header } from "./components/Header";
 import { useState } from "react";
 import { Profile } from "./components/Profile";
+import { getUserSession } from "./services/cookie/cookieStorage.server";
+import StudentService from "./services/users/Student.server";
+import { useStore } from "./zustand/store";
+import { StudentOmitPwd } from "./types/Student";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -26,13 +32,28 @@ export const links: LinksFunction = () => [
     crossOrigin: "anonymous",
   },
   {
-    href: "https://fonts.googleapis.com/css2?family=Long+Cang&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Long+Cang&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=block",
     rel: "stylesheet",
   },
 ];
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+
+  const user = await StudentService.getStudentById(userId);
+  return json(user);
+};
+
 export default function App() {
   const [profileState, setProfileState] = useState(false);
+
+  const setState = useStore((state) => state.setState);
+
+  const user: StudentOmitPwd = useLoaderData<typeof loader>();
+
+  setState(user);
+
   return (
     <html lang="en">
       <head>
