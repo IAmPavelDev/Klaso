@@ -42,17 +42,24 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = session.get("userId");
 
   const user = await StudentService.getStudentById(userId);
-  return json(user);
+
+  return user ? json(user) : null;
 };
 
 export default function App() {
   const [profileState, setProfileState] = useState(false);
 
-  const setState = useStore((state) => state.setState);
+  const [isUserLoaded, setState, clearState] = useStore((state) => [
+    state.isUserLoaded,
+    state.setState,
+    state.clearState,
+  ]);
 
-  const user: StudentOmitPwd = useLoaderData<typeof loader>();
+  const user: StudentOmitPwd | null = useLoaderData<typeof loader>();
 
-  setState(user);
+  if (user && !isUserLoaded) setState(user);
+
+  if (!user && isUserLoaded) clearState();
 
   return (
     <html lang="en">

@@ -4,7 +4,8 @@ import studentProfileIcon from "../../icons/student.svg";
 import editBtn from "../../icons/edit.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import { useStore } from "@/zustand/store";
-import { Link, useLocation } from "@remix-run/react";
+import { Form, Link, useLocation } from "@remix-run/react";
+import { Button } from "@mui/material";
 
 export const Profile = ({
   open,
@@ -15,7 +16,10 @@ export const Profile = ({
 }) => {
   const assideRef = useRef<HTMLDivElement>(null!);
 
-  const userData = useStore((state) => state.state);
+  const [isUserLoaded, userData] = useStore((state) => [
+    state.isUserLoaded,
+    state.state,
+  ]);
 
   const location = useLocation();
 
@@ -43,11 +47,22 @@ export const Profile = ({
               transition={{ duration: 0.3 }}
               className={styles.profileAsside}
             >
-              {userData ? (
+              {isUserLoaded ? (
                 <>
-                  <button className={styles.editBtn}>
-                    <img alt="edit btn" src={editBtn} />
-                  </button>
+                  <div className={styles.head}>
+                    <Form method="POST" action="/logout">
+                      <Button
+                        type="submit"
+                        variant="outlined"
+                        className={styles.head__logout}
+                      >
+                        Вийти
+                      </Button>
+                    </Form>
+                    <button className={styles.head__editBtn}>
+                      <img alt="edit btn" src={editBtn} />
+                    </button>
+                  </div>
                   <img
                     className={styles.profileIcon}
                     src={studentProfileIcon}
