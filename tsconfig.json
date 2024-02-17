@@ -1,14 +1,14 @@
 {
   "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
-    "module": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "module": "CommonJS",
+    "lib": ["DOM", "DOM.Iterable", "ES2022", "esnext"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "target": "ES2022",
+    "target": "esnext",
     "strict": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
