@@ -1,49 +1,45 @@
-import mongoose from "../db/db.server";
 import {
-  CreateStudentData,
-  StudentOmitPwd,
-  Student as StudentType,
-} from "@/types/Student";
-import bcrypt from "bcrypt";
-import { FilterQuery } from "mongoose";
+  CreateTeacherData,
+  TeacherOmitPwd,
+  TeacherType,
+} from "@/types/Teacher";
+import mongoose from "../db/db.server";
 import { v4 as uuidv4 } from "uuid";
+import { FilterQuery } from "mongoose";
+import bcrypt from "bcrypt";
 
-const StudentSchema = new mongoose.Schema<StudentType>({
+const TeacherSchema = new mongoose.Schema<TeacherType>({
   id: String,
   password: String,
   name: String,
   surname: String,
   fatherName: String,
   email: String,
-  courseStart: String,
-  courseEnd: String,
   classes: [String],
-  major: String,
-  tasksTodo: [String],
-  tasksDone: [String],
 });
 
 declare global {
-  var StudentModel: mongoose.Model<StudentType>;
+  var TeacherModel: mongoose.Model<TeacherType>;
 }
 
-let Model: mongoose.Model<StudentType>;
+let Model: mongoose.Model<TeacherType>;
 
 if (global.StudentModel) {
-  Model = global.StudentModel;
+  Model = global.TeacherModel;
 } else {
-  Model = mongoose.model<StudentType>("Student", StudentSchema);
-  global.StudentModel = Model;
+  Model = mongoose.model<TeacherType>("Teacher", TeacherSchema);
+  global.TeacherModel = Model;
 }
 
-class Student {
-  model: mongoose.Model<StudentType>;
-  constructor(model: mongoose.Model<StudentType>) {
-    this.model = model;
+class Teacher {
+  model: mongoose.Model<TeacherType>;
+
+  constructor(Model: mongoose.Model<TeacherType>) {
+    this.model = Model;
   }
 
   async verifyPassword(
-    query: FilterQuery<StudentOmitPwd>,
+    query: FilterQuery<TeacherOmitPwd>,
     password: string
   ): Promise<boolean> {
     const user = await this.model.findOne(query).lean();
@@ -53,7 +49,7 @@ class Student {
     return bcrypt.compare(password, user.password);
   }
 
-  async getStudentByEmail(email: string): Promise<StudentOmitPwd | undefined> {
+  async getByEmail(email: string): Promise<TeacherOmitPwd | undefined> {
     const student = await this.model.findOne({ email }).lean();
 
     if (!student) return;
@@ -62,7 +58,7 @@ class Student {
     return studentData;
   }
 
-  async getStudentById(searchId: string): Promise<StudentOmitPwd | undefined> {
+  async getById(searchId: string): Promise<TeacherOmitPwd | undefined> {
     const student = await this.model.findOne({ id: searchId }).lean();
 
     if (!student) return;
@@ -71,9 +67,7 @@ class Student {
     return studentData;
   }
 
-  async createStudent(
-    data: CreateStudentData
-  ): Promise<StudentOmitPwd | undefined> {
+  async create(data: CreateTeacherData): Promise<TeacherOmitPwd | undefined> {
     if (!data) {
       return;
     }
@@ -83,13 +77,10 @@ class Student {
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    const newStudentData: StudentType = {
+    const newStudentData: TeacherType = {
       ...data,
       id: uuidv4(),
       classes: [],
-      tasksTodo: [],
-      tasksDone: [],
-      year: new Date().getFullYear() - Number(data.courseStart),
       password: hashedPassword,
     };
 
@@ -100,10 +91,10 @@ class Student {
     return newStudent;
   }
 
-  async updateStudent(
+  async update(
     id: string,
-    newData: Partial<StudentType>
-  ): Promise<StudentOmitPwd | undefined> {
+    newData: Partial<TeacherType>
+  ): Promise<TeacherOmitPwd | undefined> {
     const studentUpdated = await this.model
       .findByIdAndUpdate({ id }, newData)
       .lean();
@@ -115,7 +106,7 @@ class Student {
     return newStudent;
   }
 
-  async deleteUser(id: string): Promise<StudentOmitPwd | undefined> {
+  async delete(id: string): Promise<TeacherOmitPwd | undefined> {
     const student = await this.model.findOneAndDelete({ id }).lean();
     if (!student) return;
 
@@ -125,6 +116,6 @@ class Student {
   }
 }
 
-const StudentService = new Student(Model);
+const TeacherService = new Teacher(Model);
 
-export default StudentService;
+export default TeacherService;
