@@ -1,10 +1,14 @@
 import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { RegistrationForm } from "@/widgets/Forms/RegistrationForm";
-import { RegService } from "@/services/auth/reg.server";
+import {
+  RegStudentService,
+  RegTeacherService,
+} from "@/services/auth/reg.server";
 import { CreateStudentData } from "@/types/Student";
 import { createUserSession } from "@/services/cookie/cookieStorage.server";
+import { CreateTeacherData } from "@/types/Teacher";
 
-const checkIsObjValid = (obj: any): obj is CreateStudentData => {
+const checkStudentData = (obj: any): obj is CreateStudentData => {
   return (
     "email" in obj &&
     "password" in obj &&
@@ -16,6 +20,15 @@ const checkIsObjValid = (obj: any): obj is CreateStudentData => {
     "courseEnd" in obj
   );
 };
+const checkTeacherData = (obj: any): obj is CreateTeacherData => {
+  return (
+    "email" in obj &&
+    "password" in obj &&
+    "name" in obj &&
+    "surname" in obj &&
+    "fatherName" in obj
+  );
+};
 
 export const meta: MetaFunction = () => {
   return [
@@ -25,20 +38,32 @@ export const meta: MetaFunction = () => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const entities = formData.entries();
-  const raw = {} as { [key: string]: string };
-  let data: [string, string] = entities.next().value;
+  const { userType, ...RegBody } = Object.fromEntries(
+    (await request.formData()).entries()
+  );
 
-  while (Boolean(data)) {
-    raw[data[0]] = data[1];
-    data = entities.next().value;
+  let regResponse:
+    | {
+        status: string;
+        msg: string;
+        userId?: undefined;
+      }
+    | {
+        status: string;
+        userId: string;
+        msg?: undefined;
+      }
+    | undefined;
+
+  if (userType === "student") {
+    if (!checkStudentData(RegBody)) return redirect("/reg");
+
+    regResponse = await RegStudentService(RegBody);
+  } else if (userType === "teacher") {
+    if (!checkTeacherData(RegBody)) return redirect("/reg");
+
+    regResponse = await RegTeacherService(RegBody);
   }
-
-  if (!checkIsObjValid(raw)) return redirect("/reg");
-
-  const regResponse = await RegService(raw);
-
   if (!regResponse || regResponse.status !== "success" || !regResponse.userId)
     return redirect("/reg");
 
