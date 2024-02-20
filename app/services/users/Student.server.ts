@@ -53,7 +53,7 @@ class Student {
     return bcrypt.compare(password, user.password);
   }
 
-  async getStudentByEmail(email: string): Promise<StudentOmitPwd | undefined> {
+  async getByEmail(email: string): Promise<StudentOmitPwd | undefined> {
     const student = await this.model.findOne({ email }).lean();
 
     if (!student) return;
@@ -62,7 +62,7 @@ class Student {
     return studentData;
   }
 
-  async getStudentById(searchId: string): Promise<StudentOmitPwd | undefined> {
+  async getById(searchId: string): Promise<StudentOmitPwd | undefined> {
     const student = await this.model.findOne({ id: searchId }).lean();
 
     if (!student) return;
@@ -71,9 +71,7 @@ class Student {
     return studentData;
   }
 
-  async createStudent(
-    data: CreateStudentData
-  ): Promise<StudentOmitPwd | undefined> {
+  async create(data: CreateStudentData): Promise<StudentOmitPwd | undefined> {
     if (!data) {
       return;
     }
@@ -100,7 +98,7 @@ class Student {
     return newStudent;
   }
 
-  async updateStudent(
+  async update(
     id: string,
     newData: Partial<StudentType>
   ): Promise<StudentOmitPwd | undefined> {
@@ -115,7 +113,7 @@ class Student {
     return newStudent;
   }
 
-  async deleteUser(id: string): Promise<StudentOmitPwd | undefined> {
+  async delete(id: string): Promise<StudentOmitPwd | undefined> {
     const student = await this.model.findOneAndDelete({ id }).lean();
     if (!student) return;
 

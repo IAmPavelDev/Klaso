@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./styles.module.css";
-import studentProfileIcon from "../../icons/student.svg";
-import editBtn from "../../icons/edit.svg";
+import editBtn from "@/icons/edit.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import { useStore } from "@/zustand/store";
 import { Form, Link, useLocation } from "@remix-run/react";
 import { Button } from "@mui/material";
+import { StudentProfile } from "./Student";
+import { isStudentOmitPwd, isTeacherOmitPwd } from "@/helpers/typecheck";
+import { TeacherProfile } from "./Teacher";
 
 export const Profile = ({
   open,
@@ -16,9 +18,10 @@ export const Profile = ({
 }) => {
   const assideRef = useRef<HTMLDivElement>(null!);
 
-  const [isUserLoaded, userData] = useStore((state) => [
+  const [isUserLoaded, userData, userType] = useStore((state) => [
     state.isUserLoaded,
     state.state,
+    state.userType,
   ]);
 
   const location = useLocation();
@@ -63,23 +66,12 @@ export const Profile = ({
                       <img alt="edit btn" src={editBtn} />
                     </button>
                   </div>
-                  <img
-                    className={styles.profileIcon}
-                    src={studentProfileIcon}
-                    alt="student profile icon"
-                  />
-                  <p
-                    className={styles.name}
-                  >{`${userData.surname} ${userData.name} ${userData.fatherName}`}</p>
-                  <p className={styles.major}>{userData.major}</p>
-                  <p className={styles.years}>
-                    Роки навчання: {userData.courseStart} - {userData.courseEnd}
-                  </p>
-                  <p>
-                    Студент{" "}
-                    {new Date().getFullYear() - Number(userData.courseStart)}-го{" "}
-                    курсу
-                  </p>
+                  {userType === "student" && isStudentOmitPwd(userData) && (
+                    <StudentProfile data={userData} />
+                  )}
+                  {userType === "teacher" && isTeacherOmitPwd(userData) && (
+                    <TeacherProfile data={userData} />
+                  )}
                 </>
               ) : (
                 <div className={styles.login}>

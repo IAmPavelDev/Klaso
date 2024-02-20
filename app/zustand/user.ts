@@ -1,10 +1,15 @@
 import { StudentOmitPwd } from "@/types/Student";
+import { TeacherOmitPwd } from "@/types/Teacher";
 import { StateCreator } from "zustand";
 
 export type UserSliceType = {
   isUserLoaded: boolean;
-  state: StudentOmitPwd;
-  setState: (data: StudentOmitPwd) => void;
+  userType: "" | "student" | "teacher";
+  state: StudentOmitPwd | TeacherOmitPwd;
+  setState: (
+    data: StudentOmitPwd | TeacherOmitPwd,
+    userType: "student" | "teacher"
+  ) => void;
   clearState: () => void;
 };
 
@@ -12,15 +17,17 @@ export const UserSlice: StateCreator<UserSliceType, [], [], UserSliceType> = (
   set
 ) => ({
   isUserLoaded: false,
-  state: {} as StudentOmitPwd,
-  setState: (data: StudentOmitPwd) =>
-    set((Store) => ({ ...Store, state: data, isUserLoaded: true })),
+  userType: "",
+  state: {} as StudentOmitPwd | TeacherOmitPwd,
+  setState: (data, userType) =>
+    set((Store) => ({ ...Store, state: data, isUserLoaded: true, userType })),
   clearState: () => {
     set((Store) => {
       return {
         ...Store,
-        state: {} as StudentOmitPwd,
+        state: {} as StudentOmitPwd | TeacherOmitPwd,
         isUserLoaded: false,
+        userType: "",
       } as UserSliceType;
     });
   },

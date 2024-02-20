@@ -14,11 +14,13 @@ import globalStyles from "./styles/global.css";
 import resetCss from "./styles/reset.css";
 import { Header } from "./components/Header";
 import { useState } from "react";
-import { Profile } from "./components/Profile";
+import { Profile } from "./components/Profiles";
 import { getUserSession } from "./services/cookie/cookieStorage.server";
 import StudentService from "./services/users/Student.server";
 import { useStore } from "./zustand/store";
 import { StudentOmitPwd } from "./types/Student";
+import TeacherService from "./services/users/Teacher.server";
+import { TeacherOmitPwd } from "./types/Teacher";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -37,13 +39,31 @@ export const links: LinksFunction = () => [
   },
 ];
 
+type userDataType = {
+  user: TeacherOmitPwd | StudentOmitPwd;
+  userType: "student" | "teacher";
+};
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await getUserSession(request);
   const userId = session.get("userId");
 
-  const user = await StudentService.getStudentById(userId);
+  const StudentQuery = await StudentService.getById(userId);
+  const TeacherQuery = await TeacherService.getById(userId);
 
-  return user ? json(user) : null;
+  const [student, teacher] = await Promise.all([StudentQuery, TeacherQuery]);
+
+  const userData = {} as userDataType;
+
+  if (student) {
+    userData.user = student;
+    userData.userType = "student";
+  } else if (teacher) {
+    userData.user = teacher;
+    userData.userType = "teacher";
+  }
+
+  return Object.keys(userData).length ? json(userData) : null;
 };
 
 export default function App() {
@@ -55,11 +75,14 @@ export default function App() {
     state.clearState,
   ]);
 
-  const user: StudentOmitPwd | null = useLoaderData<typeof loader>();
+  const loaderData: userDataType | null = useLoaderData<typeof loader>();
 
-  if (user && !isUserLoaded) setState(user);
+  if (loaderData && !isUserLoaded) {
+    const { user, userType }: userDataType = loaderData;
+    setState(user, userType);
+  }
 
-  if (!user && isUserLoaded) clearState();
+  if (!loaderData && isUserLoaded) clearState();
 
   return (
     <html lang="en">

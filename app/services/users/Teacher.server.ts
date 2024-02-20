@@ -24,7 +24,7 @@ declare global {
 
 let Model: mongoose.Model<TeacherType>;
 
-if (global.StudentModel) {
+if (global.TeacherModel) {
   Model = global.TeacherModel;
 } else {
   Model = mongoose.model<TeacherType>("Teacher", TeacherSchema);
@@ -50,21 +50,21 @@ class Teacher {
   }
 
   async getByEmail(email: string): Promise<TeacherOmitPwd | undefined> {
-    const student = await this.model.findOne({ email }).lean();
+    const teacher = await this.model.findOne({ email }).lean();
 
-    if (!student) return;
-    const { _id, password, ...studentData } = student;
+    if (!teacher) return;
+    const { _id, password, ...teacherData } = teacher;
 
-    return studentData;
+    return teacherData;
   }
 
   async getById(searchId: string): Promise<TeacherOmitPwd | undefined> {
-    const student = await this.model.findOne({ id: searchId }).lean();
+    const teacher = await this.model.findOne({ id: searchId }).lean();
 
-    if (!student) return;
-    const { _id, password, ...studentData } = student;
+    if (!teacher) return;
+    const { _id, password, ...teacherData } = teacher;
 
-    return studentData;
+    return teacherData;
   }
 
   async create(data: CreateTeacherData): Promise<TeacherOmitPwd | undefined> {
@@ -77,42 +77,42 @@ class Teacher {
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    const newStudentData: TeacherType = {
+    const newTeacherData: TeacherType = {
       ...data,
       id: uuidv4(),
       classes: [],
       password: hashedPassword,
     };
 
-    const { _id, password, ...newStudent } = (
-      await this.model.create(newStudentData)
+    const { _id, password, ...newTeacher } = (
+      await this.model.create(newTeacherData)
     ).toJSON();
 
-    return newStudent;
+    return newTeacher;
   }
 
   async update(
     id: string,
     newData: Partial<TeacherType>
   ): Promise<TeacherOmitPwd | undefined> {
-    const studentUpdated = await this.model
+    const teacherUpdated = await this.model
       .findByIdAndUpdate({ id }, newData)
       .lean();
 
-    if (!studentUpdated) return;
+    if (!teacherUpdated) return;
 
-    const { _id, password, ...newStudent } = studentUpdated;
+    const { _id, password, ...newTeacher } = teacherUpdated;
 
-    return newStudent;
+    return newTeacher;
   }
 
   async delete(id: string): Promise<TeacherOmitPwd | undefined> {
-    const student = await this.model.findOneAndDelete({ id }).lean();
-    if (!student) return;
+    const teacher = await this.model.findOneAndDelete({ id }).lean();
+    if (!teacher) return;
 
-    const { _id, password, ...studentData } = student;
+    const { _id, password, ...teacherData } = teacher;
 
-    return studentData;
+    return teacherData;
   }
 }
 

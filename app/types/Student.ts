@@ -14,7 +14,7 @@ export type Student = {
   email: string;
 };
 
-export type StudentOmitPwd = Omit<Student, "password">;
+export type StudentOmitPwd = Omit<Student, "password" | "year">;
 
 export interface CreateStudentData {
   password: string;
