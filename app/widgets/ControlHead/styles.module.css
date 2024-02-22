@@ -1,0 +1,32 @@
+.wrapper {
+  padding: 10px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.wrapper__addBtn {
+  padding: 12px 25px;
+  background-color: var(--grey);
+  border-radius: 10px;
+  cursor: pointer;
+  filter: drop-shadow(0 0 1px var(--blue));
+  transition: filter 0.3s 0.1s ease;
+  text-decoration: none;
+}
+
+.wrapper__addBtn p {
+  color: white;
+  font-family: "Nunito", sans-serif;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0.6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wrapper__addBtn:hover {
+    filter: drop-shadow(0 0 2px var(--blue));
+  }
+}

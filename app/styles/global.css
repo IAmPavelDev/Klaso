@@ -12,6 +12,25 @@ body {
   font-style: normal;
 }
 
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: var(--dark-grey);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--light-grey);
+  border-radius: 5px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--blue);
+  }
+}
+
 html {
   box-sizing: border-box;
   scroll-behavior: smooth;

@@ -1,5 +1,5 @@
 import { ClassType, CreateClassType } from "@/types/Class";
-import mongoose from "../db/db.server";
+import mongoose from "@/services/db/db.server";
 import { v4 as uuidv4 } from "uuid";
 
 const ClassSchema = new mongoose.Schema<ClassType>({

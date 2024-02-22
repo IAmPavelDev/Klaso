@@ -1,7 +1,6 @@
 import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import React from "react";
-import { LoginForm } from "@/widgets/Forms/LoginForm";
+import { LoginForm } from "@/widgets/Forms/Login";
 import { CredentialsLogin } from "@/services/auth/login.server";
 import { createUserSession } from "@/services/cookie/cookieStorage.server";
 

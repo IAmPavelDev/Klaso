@@ -1,0 +1,65 @@
+.mask {
+  background-color: var(--dark-grey);
+  opacity: 0.5;
+  height: 100dvh;
+  width: 100vw;
+  position: fixed;
+  inset: 0;
+  cursor: default;
+}
+
+.wrapper {
+  background-color: var(--dark-grey);
+  max-height: calc(100lvh - 152px);
+  width: 60vw;
+  max-width: 800px;
+  z-index: 10;
+  border-radius: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  padding: 10px;
+  filter: drop-shadow(0 0 1px var(--blue));
+  overflow-y: auto;
+}
+
+.wrapper::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.wrapper form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  max-height: 100%;
+}
+
+.form__input {
+  font-size: 20px;
+}
+
+.form__submit {
+  padding: 10px 15px;
+  width: fit-content;
+  color: white;
+  border-radius: 10px;
+  background-color: var(--light-grey);
+  filter: drop-shadow(0 0 1px var(--blue));
+  font-family: "Nunito", sans-serif;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  transition: filter 0.3s 0.1s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .form__submit:hover {
+    filter: drop-shadow(0 0 2px var(--blue));
+  }
+}

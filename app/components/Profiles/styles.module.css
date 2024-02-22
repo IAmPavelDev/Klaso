@@ -27,7 +27,7 @@
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  font-family: "Lexend", sans-serif;
+  font-family: "Nunito", sans-serif;
   text-align: center;
 }
 
@@ -37,9 +37,6 @@
   align-items: center;
   width: 100%;
   padding-bottom: 18px;
-}
-
-.head__logout {
 }
 
 .head__editBtn {

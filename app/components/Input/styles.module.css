@@ -1,7 +1,11 @@
 .wrapper input:-webkit-autofill,
 .wrapper input:-webkit-autofill:hover,
 .wrapper input:-webkit-autofill:focus,
-.wrapper input:-webkit-autofill:active {
+.wrapper input:-webkit-autofill:active,
+.wrapper textarea:-webkit-autofill,
+.wrapper textarea:-webkit-autofill:hover,
+.wrapper textarea:-webkit-autofill:focus,
+.wrapper textarea:-webkit-autofill:active {
   background-color: var(--grey) !important;
   -webkit-box-shadow: 0 0 0px 1000px var(--grey) inset;
   -webkit-background-clip: text !important;
@@ -12,7 +16,8 @@
   caret-color: white;
 }
 
-.wrapper input::placeholder {
+.wrapper input::placeholder,
+.wrapper textarea::placeholder {
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -24,7 +29,8 @@
   background-color: var(--grey);
 }
 
-.wrapper input {
+.wrapper input,
+.wrapper textarea {
   color: white;
   caret-color: white;
 }

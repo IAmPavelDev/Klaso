@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { RegistrationForm } from "@/widgets/Forms/RegistrationForm";
+import { RegistrationForm } from "@/widgets/Forms/Reg";
 import {
   RegStudentService,
   RegTeacherService,
