@@ -1,0 +1,22 @@
+.wrapper {
+  background-color: var(--grey);
+  padding: 10px;
+  border-radius: 10px;
+  width: calc(33.3vw - 40px);
+}
+
+.wrapper__head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.head__title {
+  font-size: 24px;
+  font-family: "Nunito", sans-serif;
+  color: white;
+  white-space: nowrap;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 100px);
+}
