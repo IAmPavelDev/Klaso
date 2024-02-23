@@ -22,10 +22,25 @@
   padding: 10px;
   filter: drop-shadow(0 0 1px var(--blue));
   overflow-y: auto;
+  font-family: "Nunito", sans-serif;
+  transform: translate3d(1px, 1px, 0);
+  will-change: transform;
+  transform: rotate(0.01deg) scale(1.01);
 }
 
 .wrapper::-webkit-scrollbar-track {
   border-radius: 10px;
+}
+
+.wrapper p {
+  font-size: 16px;
+  text-align: center;
+  padding: 10px 0;
+  letter-spacing: 0.7px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: white;
+  font-family: "Nunito", sans-serif;
 }
 
 .wrapper form {
@@ -35,10 +50,12 @@
   align-items: center;
   gap: 10px;
   max-height: 100%;
+  font-family: "Nunito", sans-serif;
 }
 
 .form__input {
   font-size: 20px;
+  font-family: "Nunito", sans-serif;
 }
 
 .form__submit {
@@ -61,5 +78,12 @@
 @media (hover: hover) and (pointer: fine) {
   .form__submit:hover {
     filter: drop-shadow(0 0 2px var(--blue));
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .wrapper {
+    width: 90vw;
+    max-width: 800px;
   }
 }

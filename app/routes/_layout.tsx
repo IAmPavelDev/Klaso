@@ -1,8 +1,10 @@
+import ClassService from "@/services/classes/Classes.server";
+import { ClassType } from "@/types/Class";
 import { Classes } from "@/widgets/Classes";
 import { ClassesHead } from "@/widgets/ControlHead";
 import { useStore } from "@/zustand/store";
-import type { MetaFunction } from "@remix-run/node";
-import { Outlet } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Outlet, json, useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,8 +13,15 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const classes = await ClassService.getAll();
+
+  return json({ classes });
+};
+
 export default function Component() {
   const userType = useStore((store) => store.userType);
+  const { classes: classesData } = useLoaderData<typeof loader>();
 
   return (
     <div
@@ -22,7 +31,7 @@ export default function Component() {
       }}
     >
       {userType === "teacher" && <ClassesHead />}
-      <Classes />
+      <Classes classesData={classesData} />
       <Outlet />
     </div>
   );

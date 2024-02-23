@@ -19,7 +19,7 @@ declare global {
 
 let Model: mongoose.Model<ClassType>;
 
-if (global.TeacherModel) {
+if (global.ClassModel) {
   Model = global.ClassModel;
 } else {
   Model = mongoose.model<ClassType>("Class", ClassSchema);
@@ -31,6 +31,21 @@ class Class {
 
   constructor(Model: mongoose.Model<ClassType>) {
     this.model = Model;
+  }
+
+  async getAll(): Promise<Array<ClassType | undefined>> {
+    const classes = await this.model.find({}).lean();
+
+    return classes.map(
+      (
+        classInfo: mongoose.FlattenMaps<ClassType> & {
+          _id?: mongoose.Types.ObjectId;
+        }
+      ): ClassType => {
+        delete classInfo._id;
+        return classInfo;
+      }
+    );
   }
 
   async getById(searchId: string): Promise<ClassType | undefined> {
@@ -53,7 +68,7 @@ class Class {
     const newClassData: ClassType = {
       ...data,
       id: uuidv4(),
-      created: new Date(),
+      created: new Date().toString(),
       tasks: [],
       students: [],
     };

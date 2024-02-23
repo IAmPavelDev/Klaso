@@ -2,7 +2,7 @@ export type ClassType = {
   id: string;
   title: string;
   description: string;
-  created: Date;
+  created: string;
   major: string;
   tasks: Array<string>;
   teacher: string;

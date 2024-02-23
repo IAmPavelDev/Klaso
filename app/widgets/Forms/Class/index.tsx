@@ -7,6 +7,7 @@ export const ClassForm = () => {
     <>
       <Link to="/" className={styles.mask} />
       <div className={styles.wrapper}>
+        <p>Створити новий клас</p>
         <Form method="POST" action="/createClass">
           <Input
             type="text"

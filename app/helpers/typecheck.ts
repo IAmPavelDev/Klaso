@@ -1,3 +1,4 @@
+import { CreateClassType } from "@/types/Class";
 import { StudentOmitPwd } from "@/types/Student";
 import { TeacherOmitPwd } from "@/types/Teacher";
 
@@ -25,5 +26,11 @@ export const isTeacherOmitPwd = (obj: any): obj is TeacherOmitPwd => {
     "fatherName" in obj &&
     "email" in obj &&
     "classes" in obj
+  );
+};
+
+export const isCreateClassType = (obj: any): obj is CreateClassType => {
+  return (
+    "title" in obj && "description" in obj && "major" in obj && "teacher" in obj
   );
 };
