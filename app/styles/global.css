@@ -21,14 +21,14 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgba(82, 148, 226, 0.3);
+  background-color: rgba(82, 148, 226, 0.7);
   border-radius: 5px;
   padding: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   *::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(82, 148, 226, 0.7);
+    background-color: rgba(82, 148, 226, 1);
   }
 }
 

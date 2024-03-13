@@ -3,20 +3,50 @@
   padding: 10px;
   border-radius: 10px;
   width: calc(33.3vw - 40px);
+  font-family: "Nunito", sans-serif;
+  color: white;
+  transition: filter 0.3s 0.1s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wrapper:hover {
+    filter: drop-shadow(0 0 2px var(--blue));
+  }
 }
 
 .wrapper__head {
   display: flex;
   justify-content: space-between;
+  white-space: nowrap;
 }
 
 .head__title {
   font-size: 24px;
-  font-family: "Nunito", sans-serif;
-  color: white;
-  white-space: nowrap;
   overflow-x: hidden;
   overflow-y: hidden;
   text-overflow: ellipsis;
-  width: calc(100% - 100px);
+  padding-right: 40px;
+  width: 100%;
+}
+
+.head__teacher {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.wrapper__tasks {
+  background-color: var(--dark-grey);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.tasks__placeholder {
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

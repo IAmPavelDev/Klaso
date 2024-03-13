@@ -60,6 +60,7 @@ class Teacher {
 
   async getById(searchId: string): Promise<TeacherOmitPwd | undefined> {
     const teacher = await this.model.findOne({ id: searchId }).lean();
+    console.log(searchId, teacher);
 
     if (!teacher) return;
     const { _id, password, ...teacherData } = teacher;
@@ -112,6 +113,23 @@ class Teacher {
 
     const { _id, password, ...teacherData } = teacher;
 
+    return teacherData;
+  }
+
+  async pushClass(
+    classId: string,
+    teacherId: string
+  ): Promise<TeacherOmitPwd | undefined> {
+    if (!classId || !teacherId) return;
+    const teacher = await this.model.findOne();
+
+    if (!teacher) return;
+
+    teacher.classes.push(classId);
+
+    await teacher.save();
+
+    const { _id, password, ...teacherData } = teacher;
     return teacherData;
   }
 }
