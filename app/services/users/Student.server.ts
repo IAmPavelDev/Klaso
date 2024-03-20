@@ -4,7 +4,7 @@ import {
   StudentOmitPwd,
   Student as StudentType,
 } from "@/types/Student";
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import { FilterQuery } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
@@ -69,6 +69,33 @@ class Student {
     const { _id, password, ...studentData } = student;
 
     return studentData;
+  }
+
+  async search(query: string): Promise<StudentOmitPwd[]> {
+    const filterRegExp = new RegExp(query, "i");
+    const opts = {
+      $or: [
+        { name: filterRegExp },
+        { surname: filterRegExp },
+        { fatherName: filterRegExp },
+        { major: filterRegExp },
+      ],
+    };
+
+    const students = await this.model.find(opts).lean();
+
+    const studentsSanitized = students.map(
+      (
+        student: StudentType & {
+          _id: mongoose.Types.ObjectId;
+        }
+      ) => {
+        const { _id, password, ...studentSanitized } = student;
+        return studentSanitized;
+      }
+    ) satisfies StudentOmitPwd[];
+
+    return studentsSanitized;
   }
 
   async create(data: CreateStudentData): Promise<StudentOmitPwd | undefined> {

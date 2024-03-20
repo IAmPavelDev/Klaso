@@ -4,7 +4,13 @@ import { getUserSession } from "@/services/cookie/cookieStorage.server";
 import { TeacherGuard } from "@/services/guards/Teacher.server";
 import TeacherService from "@/services/users/Teacher.server";
 import { ClassForm } from "@/widgets/Forms/Class";
-import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (!(await TeacherGuard(request))) return redirect("/", 403);
@@ -33,6 +39,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect("/");
 };
 
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  const { id } = params;
+  if (!id) return "new";
+
+  if (id !== "new") {
+    const initialData = await ClassService.getById(id);
+    return json(initialData);
+  }
+
+  console.log(id);
+
+  return id;
+};
+
 export default function Component() {
-  return <ClassForm />;
+  const classInfo = useLoaderData<typeof loader>();
+
+  return <ClassForm classInfo={classInfo} />;
 }

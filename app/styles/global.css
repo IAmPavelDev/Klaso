@@ -4,12 +4,14 @@
   --blue: #5294e2;
   --light-grey: #4b5162;
   --light: #7c818c;
+  --white: #ffffff;
 }
 
 body {
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+  background-color: var(--light-grey);
 }
 
 *::-webkit-scrollbar {

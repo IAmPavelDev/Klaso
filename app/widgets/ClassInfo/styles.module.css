@@ -1,0 +1,40 @@
+.wrapper {
+  max-width: 400px;
+  width: 80vw;
+  border-right: 4px var(--dark-grey) solid;
+  height: calc(100lvh - 90px);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  padding-top: 24px;
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+}
+
+.wrapper__title {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.wrapper__name {
+  font-size: 20px;
+}
+
+.wrapper__descr {
+  line-height: 20px;
+  font-size: 18px;
+  text-align: justify;
+}
+
+.wrapper__descr::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+}
+
+.wrapper__label {
+  align-self: flex-start;
+}
