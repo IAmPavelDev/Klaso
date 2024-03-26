@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-const dbURL = process.env.DATABASE_URL;
+const dbURL =
+  process.env.DATABASE_URL ??
+  "mongodb+srv://Klaso:cSjIz5GO14tJhTLM@klaso.gxlaisk.mongodb.net/?retryWrites=true&w=majority";
 
 if (!dbURL) {
   throw new Error("Please define the DATABASE_URL");

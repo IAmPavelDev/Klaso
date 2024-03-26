@@ -48,8 +48,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     return json(initialData);
   }
 
-  console.log(id);
-
   return id;
 };
 

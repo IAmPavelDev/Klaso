@@ -11,15 +11,12 @@ export const StudentSearch: FC<{
   const [searchStr, setSearchStr] = useState<string>("");
 
   useEffect(() => {
-    fetch("/studentQuery?q=" + searchStr, { method: "GET" })
+    fetch("/student?q=" + searchStr, { method: "GET" })
       .then((data) => data.json())
       .then((res) => {
-        console.log(res);
         setFeed(res.students);
       });
   }, [searchStr]);
-
-  console.log(feed, searchStr);
 
   return (
     <div className={styles.wrapper}>

@@ -1,28 +1,23 @@
 import { Link } from "@remix-run/react";
 import styles from "./styles.module.css";
 import { Input } from "@/components/Input";
-import { FC, useReducer, useState } from "react";
+import { FC, useEffect, useReducer, useState } from "react";
 import { ClassType } from "@/types/Class";
 import { StudentOmitPwd } from "@/types/Student";
 import { StudentSearch } from "@/components/StudentSearch";
+import { useForm } from "react-hook-form";
+import { isStudentOmitPwd } from "@/helpers/typecheck";
+
+type FormType = {
+  title: string;
+  description: string;
+  major: string;
+  students: string[];
+};
 
 type ActionType = {
   type: "title" | "description" | "major" | "student";
   payload: string;
-};
-
-const FormReducer = (state: ClassType, action: ActionType) => {
-  const { type, payload } = action;
-  switch (type) {
-    case "major":
-    case "description":
-    case "title":
-      return { ...state, [type]: payload };
-    case "student":
-      return { ...state, students: [...state.students, payload] };
-    default:
-      return state;
-  }
 };
 
 export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
@@ -42,51 +37,77 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
         } satisfies ClassType)
       : { ...classInfo };
 
-  const [state, dispatch] = useReducer(FormReducer, defaultData);
+  const formData = new FormData();
 
   const [selectedStudents, setSelectedStudents] = useState<StudentOmitPwd[]>(
     []
   );
 
-  const formData = new FormData();
+  const { register, handleSubmit, getValues } = useForm<FormType>();
+
+  console.log(register("students").onChange({ target: ["test"] }));
+
+  const onSubmit = handleSubmit((data) => console.log(data));
+
+  useEffect(() => {
+    const GetStudents = async () => {
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+      const opts = {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ studentsIds: defaultData.students }),
+      };
+      const students: unknown = await fetch("/student", opts).then((res) =>
+        res.json()
+      );
+      if (Array.isArray(students) && students.every(isStudentOmitPwd))
+        setSelectedStudents(students);
+    };
+    selectedStudents.length === 0 && GetStudents();
+  }, []);
 
   return (
     <>
       <Link to="/" className={styles.mask} />
       <div className={styles.wrapper}>
         <p>Створити новий клас</p>
-        <div className={styles.form}>
+        <form onSubmit={onSubmit} className={styles.form}>
           <Input
             type="text"
             placeholder="Назва"
-            name="title"
             className={styles.form__input}
             required
-            defaultValue={state.title}
+            {...register("title")}
           />
           <Input
             type="text"
-            name="description"
             multiline
             minRows={3}
             placeholder="Опис"
             className={styles.form__input}
             required
-            defaultValue={state.description}
+            {...register("description")}
           />
           <Input
             type="text"
             placeholder="Спеціальність"
-            name="major"
             className={styles.form__input}
             required
-            defaultValue={state.major}
+            {...register("major")}
           />
-          <StudentSearch setStudent={(student: StudentOmitPwd) => {}} />
-          {selectedStudents.map((student: StudentOmitPwd) => (
-            <p>{student.name}</p>
-          ))}
-        </div>
+        </form>
+        <StudentSearch
+          setStudent={(student: StudentOmitPwd) => {
+            register("students").onChange({
+              target: [student.id, ...getValues("students")],
+            });
+            setSelectedStudents((prev) => [...prev, student]);
+          }}
+        />
+        {/* {selectedStudents.map((student: StudentOmitPwd) => ( */}
+        {/*   <p>{student.name}</p> */}
+        {/* ))} */}
         <button type="submit" className={styles.form__submit}>
           Створити
         </button>
