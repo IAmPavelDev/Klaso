@@ -11,10 +11,16 @@ export const GetStudents = async (
     headers,
     body: JSON.stringify({ studentsIds }),
   };
-  const students: unknown = await fetch("/student", opts).then((res) =>
-    res.json()
-  );
-  if (Array.isArray(students) && students.every(isStudentOmitPwd))
-    return students;
+  const data: unknown = await fetch("/student", opts).then((res) => res.json());
+
+  if (
+    data &&
+    typeof data === "object" &&
+    "students" in data &&
+    Array.isArray(data.students) &&
+    data.students.every(isStudentOmitPwd)
+  ) {
+    return data.students;
+  }
   return [];
 };

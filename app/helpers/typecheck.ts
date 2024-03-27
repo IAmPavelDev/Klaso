@@ -31,6 +31,10 @@ export const isTeacherOmitPwd = (obj: any): obj is TeacherOmitPwd => {
 
 export const isCreateClassType = (obj: any): obj is CreateClassType => {
   return (
-    "title" in obj && "description" in obj && "major" in obj && "teacher" in obj
+    "title" in obj &&
+    "description" in obj &&
+    "major" in obj &&
+    "teacher" in obj &&
+    "students" in obj
   );
 };

@@ -1,23 +1,40 @@
 import { StudentOmitPwd } from "@/types/Student";
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { Input } from "@/components/Input";
 import { StudentCard } from "@/components/StudentCard";
 
 export const StudentSearch: FC<{
+  selectedStudents: StudentOmitPwd[];
   setStudent: (student: StudentOmitPwd) => void;
-}> = ({ setStudent }) => {
+}> = ({ setStudent, selectedStudents }) => {
   const [feed, setFeed] = useState<StudentOmitPwd[]>([]);
 
   const [searchStr, setSearchStr] = useState<string>("");
+
+  const filterFeed = useCallback(
+    (f: StudentOmitPwd[]) => {
+      const filtered = f.filter(
+        (s: StudentOmitPwd) =>
+          !selectedStudents.some((selected) => selected.id === s.id)
+      );
+
+      setFeed(filtered);
+    },
+    [selectedStudents]
+  );
 
   useEffect(() => {
     fetch("/student?q=" + searchStr, { method: "GET" })
       .then((data) => data.json())
       .then((res) => {
-        setFeed(res.students);
+        filterFeed(res.students);
       });
   }, [searchStr]);
+
+  useEffect(() => {
+    filterFeed(feed);
+  }, [selectedStudents]);
 
   return (
     <div className={styles.wrapper}>
@@ -31,9 +48,20 @@ export const StudentSearch: FC<{
         }
         className={styles.form__input}
       />
-      {feed.map((s: StudentOmitPwd) => (
-        <StudentCard data={s} key={s.id} />
-      ))}
+      <div className={styles.wrapper__feed}>
+        {feed.map((s: StudentOmitPwd) => (
+          <div className={styles.feed__student} key={s.id}>
+            <div
+              role="button"
+              className={styles.student__add}
+              onClick={() => setStudent(s)}
+            >
+              +
+            </div>
+            <StudentCard data={s} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

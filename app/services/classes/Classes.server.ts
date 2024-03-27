@@ -70,7 +70,6 @@ class Class {
       id: uuidv4(),
       created: new Date().toString(),
       tasks: [],
-      students: [],
     };
 
     const { _id, ...newClass } = (

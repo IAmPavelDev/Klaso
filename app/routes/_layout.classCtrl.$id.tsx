@@ -14,13 +14,16 @@ import { useLoaderData } from "@remix-run/react";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (!(await TeacherGuard(request))) return redirect("/", 403);
+  const formData = await request.formData();
+  const entries = formData.entries();
+  const { data } = Object.fromEntries(entries);
 
-  const body = Object.fromEntries((await request.formData()).entries());
+  if (typeof data !== "string") return redirect("/", 400);
 
   const teacher = (await getUserSession(request)).get("userId");
 
   const classData = {
-    ...body,
+    ...JSON.parse(data),
     teacher,
   };
 

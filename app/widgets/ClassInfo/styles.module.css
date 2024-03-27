@@ -10,7 +10,7 @@
   align-items: center;
   padding: 10px;
   padding-top: 24px;
-  font-family: "Nunito", sans-serif;
+  font-family: var(--NunitoFont);
   text-align: center;
 }
 

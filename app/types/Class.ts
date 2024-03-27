@@ -14,4 +14,5 @@ export type CreateClassType = {
   description: string;
   major: string;
   teacher: string;
+  students: Array<string>;
 };

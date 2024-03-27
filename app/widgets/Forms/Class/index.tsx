@@ -1,12 +1,11 @@
-import { Link } from "@remix-run/react";
+import { Link, useSubmit } from "@remix-run/react";
 import styles from "./styles.module.css";
 import { Input } from "@/components/Input";
-import { FC, useEffect, useReducer, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { ClassType } from "@/types/Class";
 import { StudentOmitPwd } from "@/types/Student";
 import { StudentSearch } from "@/components/StudentSearch";
 import { useForm } from "react-hook-form";
-import { isStudentOmitPwd } from "@/helpers/typecheck";
 import { GetStudents } from "@/helpers/GetStudentsById.client";
 import { StudentCard } from "@/components/StudentCard";
 
@@ -17,15 +16,12 @@ type FormType = {
   students: string[];
 };
 
-type ActionType = {
-  type: "title" | "description" | "major" | "student";
-  payload: string;
-};
-
 export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
   classInfo,
 }) => {
   const [page, setPage] = useState(0);
+
+  const submit = useSubmit();
 
   const defaultData =
     classInfo === "new"
@@ -41,17 +37,17 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
         } satisfies ClassType)
       : { ...classInfo };
 
-  const formData = new FormData();
-
   const [selectedStudents, setSelectedStudents] = useState<StudentOmitPwd[]>(
     []
   );
 
-  const { register, handleSubmit, getValues } = useForm<FormType>();
+  const formData = useRef<FormType>({} as FormType);
+
+  const { register, handleSubmit } = useForm<Omit<FormType, "students">>();
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
     setPage(1);
+    formData.current = { ...formData.current, ...data };
   });
 
   useEffect(() => {
@@ -59,10 +55,22 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
       defaultData.students.length > 0 &&
       (async () => {
         const students = await GetStudents(defaultData.students);
-
         setSelectedStudents(students);
       })();
   }, []);
+
+  const SubmitForm = () => {
+    const fD = new FormData();
+
+    formData.current["students"] = selectedStudents.map((s) => s.id);
+
+    fD.append("data", JSON.stringify(formData.current));
+
+    submit(fD, {
+      action: "/classCtrl/" + defaultData.id,
+      method: "POST",
+    });
+  };
 
   return (
     <>
@@ -100,23 +108,30 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
           </form>
         )}
         {page === 1 && (
-          <div className={styles.wrapper__students}>
-            <div className={styles.students__selected}>
-              {selectedStudents.map((student: StudentOmitPwd) => (
-                <StudentCard data={student} key={student.id} />
-              ))}
+          <>
+            <div className={styles.wrapper__students}>
+              <div className={styles.students__selected}>
+                {selectedStudents.map((student: StudentOmitPwd) => (
+                  <StudentCard data={student} key={student.id} />
+                ))}
+              </div>
+              <div className={styles.students__search}>
+                <StudentSearch
+                  selectedStudents={selectedStudents}
+                  setStudent={(student: StudentOmitPwd) => {
+                    setSelectedStudents((prev) => [...prev, student]);
+                  }}
+                />
+              </div>
             </div>
-            <div className={styles.students__search}>
-              <StudentSearch
-                setStudent={(student: StudentOmitPwd) => {
-                  register("students").onChange({
-                    target: [student.id, ...getValues("students")],
-                  });
-                  setSelectedStudents((prev) => [...prev, student]);
-                }}
-              />
-            </div>
-          </div>
+            <button
+              type="submit"
+              onClick={SubmitForm}
+              className={styles.form__submit}
+            >
+              створити
+            </button>
+          </>
         )}
       </div>
     </>

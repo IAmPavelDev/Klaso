@@ -3,7 +3,7 @@
   padding: 10px;
   border-radius: 10px;
   width: calc(33.3vw - 40px);
-  font-family: "Nunito", sans-serif;
+  font-family: var(--NunitoFont);
   color: white;
   transition: filter 0.3s 0.1s ease;
   display: flex;

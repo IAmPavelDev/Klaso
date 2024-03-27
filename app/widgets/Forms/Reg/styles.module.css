@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   background-color: var(--grey);
-  font-family: "Nunito";
+  font-family: var(--NunitoFont);
 }
 
 .form {
@@ -54,7 +54,7 @@
 }
 
 .form button {
-  font-family: "Nunito";
+  font-family: var(--NunitoFont);
   border: 1px solid rgba(82, 148, 226, 0.4);
   background-color: transparent;
   color: var(--blue);

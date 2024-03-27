@@ -23,7 +23,10 @@ export const StudentCard: FC<{ id: string } | { data: StudentOmitPwd }> = (
     <>
       {data && (
         <div className={styles.wrapper}>
-          <p>{[data.surname, data.name, data.fatherName].join(" ")}</p>
+          <p className={styles.wrapper__name}>
+            {[data.surname, data.name, data.fatherName].join(" ")}
+          </p>
+          <p className={styles.wrapper__major}>{data.major}</p>
         </div>
       )}
     </>

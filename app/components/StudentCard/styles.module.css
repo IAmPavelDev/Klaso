@@ -1,5 +1,37 @@
-.wrapper,
-.container {
+.wrapper {
   display: flex;
-  color: red;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  color: var(--white);
+  font-family: var(--NunitoFont);
+  border: 2px solid var(--grey);
+  border-radius: 5px;
+  padding: 10px;
+  transition: all 300ms linear;
+  overflow: hidden;
+}
+
+.wrapper__name,
+.wrapper__major {
+  text-align: right;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.wrapper__name {
+  font-size: 20px;
+}
+
+.wrapper__major {
+  font-size: 18px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wrapper:hover {
+    border: 2px solid var(--blue);
+  }
 }

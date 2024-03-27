@@ -17,7 +17,7 @@
 
 .wrapper__addBtn p {
   color: white;
-  font-family: "Nunito", sans-serif;
+  font-family: var(--NunitoFont);
   text-transform: uppercase;
   font-weight: 500;
   font-size: 14px;
