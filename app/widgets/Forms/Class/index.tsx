@@ -7,6 +7,8 @@ import { StudentOmitPwd } from "@/types/Student";
 import { StudentSearch } from "@/components/StudentSearch";
 import { useForm } from "react-hook-form";
 import { isStudentOmitPwd } from "@/helpers/typecheck";
+import { GetStudents } from "@/helpers/GetStudentsById.client";
+import { StudentCard } from "@/components/StudentCard";
 
 type FormType = {
   title: string;
@@ -23,6 +25,8 @@ type ActionType = {
 export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
   classInfo,
 }) => {
+  const [page, setPage] = useState(0);
+
   const defaultData =
     classInfo === "new"
       ? ({
@@ -45,26 +49,19 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
 
   const { register, handleSubmit, getValues } = useForm<FormType>();
 
-  console.log(register("students").onChange({ target: ["test"] }));
-
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+    setPage(1);
+  });
 
   useEffect(() => {
-    const GetStudents = async () => {
-      const headers = new Headers();
-      headers.append("Content-Type", "application/json");
-      const opts = {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ studentsIds: defaultData.students }),
-      };
-      const students: unknown = await fetch("/student", opts).then((res) =>
-        res.json()
-      );
-      if (Array.isArray(students) && students.every(isStudentOmitPwd))
+    selectedStudents.length === 0 &&
+      defaultData.students.length > 0 &&
+      (async () => {
+        const students = await GetStudents(defaultData.students);
+
         setSelectedStudents(students);
-    };
-    selectedStudents.length === 0 && GetStudents();
+      })();
   }, []);
 
   return (
@@ -72,45 +69,55 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
       <Link to="/" className={styles.mask} />
       <div className={styles.wrapper}>
         <p>Створити новий клас</p>
-        <form onSubmit={onSubmit} className={styles.form}>
-          <Input
-            type="text"
-            placeholder="Назва"
-            className={styles.form__input}
-            required
-            {...register("title")}
-          />
-          <Input
-            type="text"
-            multiline
-            minRows={3}
-            placeholder="Опис"
-            className={styles.form__input}
-            required
-            {...register("description")}
-          />
-          <Input
-            type="text"
-            placeholder="Спеціальність"
-            className={styles.form__input}
-            required
-            {...register("major")}
-          />
-        </form>
-        <StudentSearch
-          setStudent={(student: StudentOmitPwd) => {
-            register("students").onChange({
-              target: [student.id, ...getValues("students")],
-            });
-            setSelectedStudents((prev) => [...prev, student]);
-          }}
-        />
-        {/* {selectedStudents.map((student: StudentOmitPwd) => ( */}
-        {/*   <p>{student.name}</p> */}
-        {/* ))} */}
-        <button type="submit" className={styles.form__submit}>
-          Створити
-        </button>
+        {page === 0 && (
+          <form onSubmit={onSubmit} className={styles.form}>
+            <Input
+              type="text"
+              placeholder="Назва"
+              className={styles.form__input}
+              required
+              {...register("title")}
+            />
+            <Input
+              type="text"
+              multiline
+              minRows={3}
+              placeholder="Опис"
+              className={styles.form__input}
+              required
+              {...register("description")}
+            />
+            <Input
+              type="text"
+              placeholder="Спеціальність"
+              className={styles.form__input}
+              required
+              {...register("major")}
+            />
+            <button type="submit" className={styles.form__submit}>
+              Далі
+            </button>
+          </form>
+        )}
+        {page === 1 && (
+          <div className={styles.wrapper__students}>
+            <div className={styles.students__selected}>
+              {selectedStudents.map((student: StudentOmitPwd) => (
+                <StudentCard data={student} key={student.id} />
+              ))}
+            </div>
+            <div className={styles.students__search}>
+              <StudentSearch
+                setStudent={(student: StudentOmitPwd) => {
+                  register("students").onChange({
+                    target: [student.id, ...getValues("students")],
+                  });
+                  setSelectedStudents((prev) => [...prev, student]);
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

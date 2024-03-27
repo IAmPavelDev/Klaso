@@ -1,15 +1,17 @@
-import { FC, useState } from "react";
+import { FC, forwardRef, useState } from "react";
 import styles from "./styles.module.css";
 import { TextField, TextFieldProps } from "@mui/material";
 
-export const Input: FC<TextFieldProps & { className?: string }> = (
-  inputProps
-) => {
+export const Input: FC<TextFieldProps & { className?: string }> = forwardRef<
+  any,
+  TextFieldProps & { className?: string }
+>((inputProps, ref) => {
   const [placeholder, setPlaceholder] = useState<string>(
     inputProps?.placeholder ?? ""
   );
   return (
     <TextField
+      ref={ref}
       {...inputProps}
       placeholder={placeholder}
       variant="outlined"
@@ -18,4 +20,4 @@ export const Input: FC<TextFieldProps & { className?: string }> = (
       onBlur={() => setPlaceholder(inputProps?.placeholder ?? "")}
     />
   );
-};
+});

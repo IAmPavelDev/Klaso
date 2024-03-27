@@ -11,8 +11,6 @@
 .wrapper {
   background-color: var(--dark-grey);
   max-height: calc(100lvh - 152px);
-  width: 90vw;
-  max-width: 1500px;
   z-index: 10;
   border-radius: 10px;
   outline: 1px solid var(--blue);
@@ -33,7 +31,7 @@
   border-radius: 10px;
 }
 
-.wrapper p {
+.wrapper > p {
   font-size: 16px;
   text-align: center;
   padding: 10px 0;
@@ -50,9 +48,8 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  max-height: 100%;
-  width: 100%;
   font-family: "Nunito", sans-serif;
+  width: 60vw;
   max-width: 800px;
 }
 
@@ -78,6 +75,21 @@
   transition: filter 0.3s 0.1s ease;
 }
 
+.wrapper__students {
+  width: 90vw;
+  height: calc(100lvh - 152px);
+  max-width: 1500px;
+  display: flex;
+}
+
+.students__selected {
+  width: 50%;
+}
+
+.students__search {
+  width: 50%;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .form__submit:hover {
     filter: drop-shadow(0 0 2px var(--blue));
@@ -85,8 +97,11 @@
 }
 
 @media screen and (max-width: 1024px) {
-  .wrapper {
+  .wrapper .form {
     width: 90vw;
-    max-width: 800px;
   }
+}
+
+.displayNone {
+  display: none;
 }

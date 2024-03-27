@@ -1,3 +1,14 @@
 .wrapper {
   width: 100%;
 }
+
+.wrapper > p {
+  font-size: 16px;
+  text-align: center;
+  padding: 10px 0;
+  letter-spacing: 0.7px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: white;
+  font-family: "Nunito", sans-serif;
+}

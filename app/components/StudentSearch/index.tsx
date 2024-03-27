@@ -2,6 +2,7 @@ import { StudentOmitPwd } from "@/types/Student";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { Input } from "@/components/Input";
+import { StudentCard } from "@/components/StudentCard";
 
 export const StudentSearch: FC<{
   setStudent: (student: StudentOmitPwd) => void;
@@ -31,11 +32,7 @@ export const StudentSearch: FC<{
         className={styles.form__input}
       />
       {feed.map((s: StudentOmitPwd) => (
-        <div className={styles.student}>
-          <div className={styles.student__name}>
-            {[s.surname, s.name, s.fatherName].join(" ")}
-          </div>
-        </div>
+        <StudentCard data={s} key={s.id} />
       ))}
     </div>
   );

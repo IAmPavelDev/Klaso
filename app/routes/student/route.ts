@@ -8,9 +8,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const query = searchParams.get("q");
 
-  if (!query) return json({ students: [] });
-
-  const students = await StudentService.search(query);
+  const students = await StudentService.search(query ?? "");
 
   return json({ students });
 };
