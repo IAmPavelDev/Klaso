@@ -30,6 +30,7 @@
   text-overflow: ellipsis;
   padding-right: 40px;
   width: 100%;
+  line-height: 120%;
 }
 
 .head__teacher {

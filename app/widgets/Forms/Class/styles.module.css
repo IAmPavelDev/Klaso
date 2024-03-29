@@ -10,7 +10,6 @@
 
 .container {
   background-color: var(--dark-grey);
-  max-height: calc(100lvh - 152px);
   z-index: 10;
   border-radius: 10px;
   outline: 1px solid var(--blue);
@@ -29,7 +28,6 @@
 }
 
 .wrapper {
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -92,20 +90,63 @@
   position: sticky;
 }
 
+.student__remove {
+  padding: 20px;
+  font-family: var(--NunitoFont);
+  color: var(--blue);
+  font-size: 30px;
+  font-weight: 800;
+  border: 2px solid var(--grey);
+  border-radius: 5px;
+  line-height: 60%;
+  transition: all 150ms linear;
+  user-select: none;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .student__remove:hover {
+    border: 2px solid var(--blue);
+  }
+}
+
 .wrapper__students {
   width: 90vw;
-  height: calc(100lvh - 152px);
+  height: calc(100lvh - 250px);
   max-width: 1500px;
   display: flex;
   position: relative;
+  gap: 20px;
 }
 
 .students__selected {
   width: 50%;
+  overflow-y: auto;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.selected__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.selected__row div:first-child {
+  flex: 1;
+}
+
+.selected__row div:first-child > p {
+  text-align: left;
 }
 
 .students__search {
   width: 50%;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 @media (hover: hover) and (pointer: fine) {

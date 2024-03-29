@@ -10,21 +10,24 @@ export const ClassInfo: FC<{
 }> = ({ classInfo, teacherInfo }) => {
   return (
     <div className={styles.wrapper}>
-      <p className={styles.wrapper__title}>{classInfo.title}</p>
-      <p className={styles.wrapper__name}>
-        {[teacherInfo.surname, teacherInfo.name, teacherInfo.fatherName].join(
-          " "
-        )}
-      </p>
-      <p className={styles.wrapper__descr}>{classInfo.description.trim()}</p>
+      <div className={styles.wrapper__info}>
+        <p className={styles.info__title}>{classInfo.title}</p>
+        <p className={styles.info__name}>
+          {[teacherInfo.surname, teacherInfo.name, teacherInfo.fatherName].join(
+            " "
+          )}
+        </p>
+        <p className={styles.info__descr}>{classInfo.description.trim()}</p>
 
-      <p className={styles.wrapper__label}>Інші студенти в цьому класі:</p>
+        <p className={styles.info__label}>Інші студенти в цьому класі:</p>
+        <div className={styles.info__students}>
+          {classInfo.students.map((student: string) => (
+            <StudentCard id={student} />
+          ))}
+        </div>
 
-      {classInfo.students.map((student: string) => (
-        <StudentCard id={student} />
-      ))}
-
-      <div className={styles.wrapper__studentsCtrl}></div>
+        <div className={styles.info__studentsCtrl}></div>
+      </div>
     </div>
   );
 };

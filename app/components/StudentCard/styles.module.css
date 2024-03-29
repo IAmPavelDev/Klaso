@@ -10,7 +10,6 @@
   border-radius: 5px;
   padding: 10px;
   transition: all 300ms linear;
-  overflow: hidden;
 }
 
 .wrapper__name,

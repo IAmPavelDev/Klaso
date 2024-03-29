@@ -63,21 +63,19 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
 
   const SubmitForm = () => {
     if (firstStageSubmitBtnRef.current && page === 0) {
-      console.log("submit");
       firstStageSubmitBtnRef.current.click();
     } else if (page === 1) {
-      console.log(formData.current);
+      const fD = new FormData();
+
+      formData.current["students"] = selectedStudents.map((s) => s.id);
+
+      fD.append("data", JSON.stringify(formData.current));
+
+      submit(fD, {
+        action: "/classCtrl/" + defaultData.id,
+        method: "POST",
+      });
     }
-    /* const fD = new FormData(); */
-    /**/
-    /* formData.current["students"] = selectedStudents.map((s) => s.id); */
-    /**/
-    /* fD.append("data", JSON.stringify(formData.current)); */
-    /**/
-    /* submit(fD, { */
-    /*   action: "/classCtrl/" + defaultData.id, */
-    /*   method: "POST", */
-    /* }); */
   };
 
   return (
@@ -123,7 +121,20 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
               <div className={styles.wrapper__students}>
                 <div className={styles.students__selected}>
                   {selectedStudents.map((student: StudentOmitPwd) => (
-                    <StudentCard data={student} key={student.id} />
+                    <div className={styles.selected__row} key={student.id}>
+                      <StudentCard data={student} key={student.id} />
+                      <div
+                        role="button"
+                        className={styles.student__remove}
+                        onClick={() =>
+                          setSelectedStudents((prev) =>
+                            prev.filter((p) => p.id !== student.id)
+                          )
+                        }
+                      >
+                        -
+                      </div>
+                    </div>
                   ))}
                 </div>
                 <div className={styles.students__search}>

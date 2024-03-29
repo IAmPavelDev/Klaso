@@ -1,8 +1,14 @@
 .wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.wrapper__info {
   max-width: 400px;
   width: 80vw;
   border-right: 4px var(--dark-grey) solid;
   height: calc(100lvh - 90px);
+  max-height: calc(100lvh - 90px);
   color: var(--white);
   display: flex;
   flex-direction: column;
@@ -14,27 +20,35 @@
   text-align: center;
 }
 
-.wrapper__title {
+.info__title {
   font-size: 24px;
   font-weight: 500;
 }
 
-.wrapper__name {
+.info__name {
   font-size: 20px;
 }
 
-.wrapper__descr {
+.info__descr {
   line-height: 20px;
   font-size: 18px;
   text-align: justify;
 }
 
-.wrapper__descr::before {
+.info__descr::before {
   content: "";
   display: inline-block;
   width: 24px;
 }
 
-.wrapper__label {
+.info__label {
   align-self: flex-start;
+}
+
+.info__students {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
 }
