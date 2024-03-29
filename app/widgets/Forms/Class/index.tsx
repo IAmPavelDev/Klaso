@@ -21,6 +21,8 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
 }) => {
   const [page, setPage] = useState(0);
 
+  const firstStageSubmitBtnRef = useRef<HTMLInputElement>(null!);
+
   const submit = useSubmit();
 
   const defaultData =
@@ -45,7 +47,7 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
 
   const { register, handleSubmit } = useForm<Omit<FormType, "students">>();
 
-  const onSubmit = handleSubmit((data) => {
+  const onFirstStageSubmit = handleSubmit((data) => {
     setPage(1);
     formData.current = { ...formData.current, ...data };
   });
@@ -60,79 +62,90 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
   }, []);
 
   const SubmitForm = () => {
-    const fD = new FormData();
-
-    formData.current["students"] = selectedStudents.map((s) => s.id);
-
-    fD.append("data", JSON.stringify(formData.current));
-
-    submit(fD, {
-      action: "/classCtrl/" + defaultData.id,
-      method: "POST",
-    });
+    if (firstStageSubmitBtnRef.current && page === 0) {
+      console.log("submit");
+      firstStageSubmitBtnRef.current.click();
+    } else if (page === 1) {
+      console.log(formData.current);
+    }
+    /* const fD = new FormData(); */
+    /**/
+    /* formData.current["students"] = selectedStudents.map((s) => s.id); */
+    /**/
+    /* fD.append("data", JSON.stringify(formData.current)); */
+    /**/
+    /* submit(fD, { */
+    /*   action: "/classCtrl/" + defaultData.id, */
+    /*   method: "POST", */
+    /* }); */
   };
 
   return (
     <>
       <Link to="/" className={styles.mask} />
-      <div className={styles.wrapper}>
+      <div className={styles.container}>
         <p>Створити новий клас</p>
-        {page === 0 && (
-          <form onSubmit={onSubmit} className={styles.form}>
-            <Input
-              type="text"
-              placeholder="Назва"
-              className={styles.form__input}
-              required
-              {...register("title")}
-            />
-            <Input
-              type="text"
-              multiline
-              minRows={3}
-              placeholder="Опис"
-              className={styles.form__input}
-              required
-              {...register("description")}
-            />
-            <Input
-              type="text"
-              placeholder="Спеціальність"
-              className={styles.form__input}
-              required
-              {...register("major")}
-            />
-            <button type="submit" className={styles.form__submit}>
-              Далі
-            </button>
-          </form>
-        )}
-        {page === 1 && (
-          <>
-            <div className={styles.wrapper__students}>
-              <div className={styles.students__selected}>
-                {selectedStudents.map((student: StudentOmitPwd) => (
-                  <StudentCard data={student} key={student.id} />
-                ))}
+        <div className={styles.wrapper}>
+          {page === 0 && (
+            <form className={styles.form} onSubmit={onFirstStageSubmit}>
+              <Input
+                type="text"
+                placeholder="Назва"
+                className={styles.form__input}
+                required
+                {...register("title")}
+              />
+              <Input
+                type="text"
+                multiline
+                minRows={3}
+                placeholder="Опис"
+                className={styles.form__input}
+                required
+                {...register("description")}
+              />
+              <Input
+                type="text"
+                placeholder="Спеціальність"
+                className={styles.form__input}
+                required
+                {...register("major")}
+              />
+              <input
+                type="submit"
+                style={{ display: "none" }}
+                ref={firstStageSubmitBtnRef}
+              />
+            </form>
+          )}
+          {page === 1 && (
+            <>
+              <div className={styles.wrapper__students}>
+                <div className={styles.students__selected}>
+                  {selectedStudents.map((student: StudentOmitPwd) => (
+                    <StudentCard data={student} key={student.id} />
+                  ))}
+                </div>
+                <div className={styles.students__search}>
+                  <StudentSearch
+                    selectedStudents={selectedStudents}
+                    setStudent={(student: StudentOmitPwd) => {
+                      setSelectedStudents((prev) => [...prev, student]);
+                    }}
+                  />
+                </div>
               </div>
-              <div className={styles.students__search}>
-                <StudentSearch
-                  selectedStudents={selectedStudents}
-                  setStudent={(student: StudentOmitPwd) => {
-                    setSelectedStudents((prev) => [...prev, student]);
-                  }}
-                />
-              </div>
-            </div>
-            <button
-              type="submit"
-              onClick={SubmitForm}
-              className={styles.form__submit}
-            >
-              створити
-            </button>
-          </>
-        )}
+            </>
+          )}
+        </div>
+        <button
+          type="submit"
+          onClick={SubmitForm}
+          className={[styles.form__submit, styles.submit__create].join(" ")}
+        >
+          {page === 1 && "створити"}
+          {page === 0 && "далі"}
+        </button>
       </div>
     </>
   );

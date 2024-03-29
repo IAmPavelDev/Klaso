@@ -8,7 +8,7 @@
   cursor: default;
 }
 
-.wrapper {
+.container {
   background-color: var(--dark-grey);
   max-height: calc(100lvh - 152px);
   z-index: 10;
@@ -19,8 +19,17 @@
   left: 50%;
   translate: -50% -50%;
   padding: 10px;
-  overflow-y: auto;
   font-family: var(--NunitoFont);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.wrapper {
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,7 +40,7 @@
   border-radius: 10px;
 }
 
-.wrapper > p {
+.container > p {
   font-size: 16px;
   text-align: center;
   padding: 10px 0;
@@ -40,6 +49,7 @@
   text-transform: uppercase;
   color: white;
   font-family: var(--NunitoFont);
+  text-rendering: geometricPrecision;
 }
 
 .wrapper .form {
@@ -73,6 +83,13 @@
   letter-spacing: 0.6px;
   cursor: pointer;
   transition: filter 0.3s 0.1s ease;
+  margin-top: 10px;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.submit__create {
+  position: sticky;
 }
 
 .wrapper__students {
@@ -80,6 +97,7 @@
   height: calc(100lvh - 152px);
   max-width: 1500px;
   display: flex;
+  position: relative;
 }
 
 .students__selected {
