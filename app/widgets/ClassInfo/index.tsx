@@ -3,6 +3,7 @@ import { FC } from "react";
 import styles from "./styles.module.css";
 import { TeacherOmitPwd } from "@/types/Teacher";
 import { StudentCard } from "@/components/StudentCard";
+import { Link } from "@remix-run/react";
 
 export const ClassInfo: FC<{
   classInfo: ClassType;
@@ -27,6 +28,13 @@ export const ClassInfo: FC<{
         </div>
 
         <div className={styles.info__studentsCtrl}></div>
+      </div>
+      <div className={styles.wrapper__tasks}>
+        <div className={styles.wrapper__create}>
+          <Link to={`/class/${classInfo.id}/taskCtrl/new`}>
+            Створити завдання
+          </Link>
+        </div>
       </div>
     </div>
   );
