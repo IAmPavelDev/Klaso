@@ -11,22 +11,24 @@ export const Classes: FC<{
 }> = ({ classesData, teachersData }) => {
   return (
     <div className={styles.wrapper}>
-      {classesData.map((classInfo: ClassType) => (
-        <Link
-          className={styles.wrapper__classLink}
-          to={`/class/${classInfo.id}`}
-          key={classInfo.id}
-        >
-          <ClassCard
-            data={{
-              classInfo,
-              teacherInfo: teachersData.find((t: TeacherOmitPwd) =>
-                t.classes.some((classId: string) => classId === classInfo.id)
-              ),
-            }}
-          />
-        </Link>
-      ))}
+      {Array.from(classesData)
+        .reverse()
+        .map((classInfo: ClassType) => (
+          <Link
+            className={styles.wrapper__classLink}
+            to={`/class/${classInfo.id}`}
+            key={classInfo.id}
+          >
+            <ClassCard
+              data={{
+                classInfo,
+                teacherInfo: teachersData.find((t: TeacherOmitPwd) =>
+                  t.classes.some((classId: string) => classId === classInfo.id)
+                ),
+              }}
+            />
+          </Link>
+        ))}
     </div>
   );
 };
