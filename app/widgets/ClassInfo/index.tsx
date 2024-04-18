@@ -1,22 +1,19 @@
 import { ClassType } from "@/types/Class";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import styles from "./styles.module.css";
 import { TeacherOmitPwd } from "@/types/Teacher";
 import { StudentCard } from "@/components/StudentCard";
 import { Link } from "@remix-run/react";
 import { StudentOmitPwd } from "@/types/Student";
-import { GetStudents } from "@/helpers/GetStudentsById.client";
+import { TaskType } from "@/types/Task";
+import { TaskCard } from "@/components/TaskCard";
 
 export const ClassInfo: FC<{
   classInfo: ClassType;
   teacherInfo: TeacherOmitPwd;
-}> = ({ classInfo, teacherInfo }) => {
-  const [students, setStudents] = useState<StudentOmitPwd[]>([]);
-
-  useEffect(() => {
-    GetStudents(classInfo.students).then((data) => setStudents(data));
-  }, [classInfo.students]);
-
+  studentsInfo: StudentOmitPwd[];
+  tasksInfo: TaskType[];
+}> = ({ classInfo, teacherInfo, studentsInfo, tasksInfo }) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.wrapper__info}>
@@ -30,7 +27,7 @@ export const ClassInfo: FC<{
 
         <p className={styles.info__label}>Інші студенти в цьому класі:</p>
         <div className={styles.info__students}>
-          {students.map((student: StudentOmitPwd) => (
+          {studentsInfo.map((student: StudentOmitPwd) => (
             <div key={student.id}>
               <StudentCard data={student} />
             </div>
@@ -47,6 +44,11 @@ export const ClassInfo: FC<{
           >
             <p>Створити завдання</p>
           </Link>
+        </div>
+        <div className={styles.tasks__list}>
+          {[...tasksInfo].reverse().map((task: TaskType) => (
+            <TaskCard data={task} key={task.id} />
+          ))}
         </div>
       </div>
     </div>

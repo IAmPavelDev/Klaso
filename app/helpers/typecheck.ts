@@ -1,5 +1,6 @@
 import { CreateClassType } from "@/types/Class";
 import { StudentOmitPwd } from "@/types/Student";
+import { CreateTaskType, TaskType } from "@/types/Task";
 import { TeacherOmitPwd } from "@/types/Teacher";
 
 export const isStudentOmitPwd = (obj: any): obj is StudentOmitPwd => {
@@ -36,5 +37,26 @@ export const isCreateClassType = (obj: any): obj is CreateClassType => {
     "major" in obj &&
     "teacher" in obj &&
     "students" in obj
+  );
+};
+
+export const isCreateTaskType = (obj: any): obj is CreateTaskType => {
+  return (
+    "title" in obj &&
+    "description" in obj &&
+    "deadLine" in obj &&
+    "class" in obj
+  );
+};
+
+export const isTaskType = (obj: any): obj is TaskType => {
+  return (
+    "id" in obj &&
+    "title" in obj &&
+    "description" in obj &&
+    "created" in obj &&
+    "deadLine" in obj &&
+    "class" in obj &&
+    "responses" in obj
   );
 };

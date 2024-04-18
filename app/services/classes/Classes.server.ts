@@ -1,6 +1,7 @@
 import { ClassType, CreateClassType } from "@/types/Class";
 import mongoose from "@/services/db/db.server";
 import { v4 as uuidv4 } from "uuid";
+import App from "@/root";
 
 const ClassSchema = new mongoose.Schema<ClassType>({
   id: String,
@@ -90,6 +91,23 @@ class Class {
     if (!classUpdated) return;
 
     const { _id, ...newClass } = classUpdated;
+
+    return newClass;
+  }
+
+  async pushTask(
+    taskId: string,
+    classId: string
+  ): Promise<ClassType | undefined> {
+    const classInfo = await this.model.findOne({ id: classId });
+
+    if (!classInfo) return;
+
+    classInfo.tasks.push(taskId);
+
+    classInfo.save();
+
+    const { _id, ...newClass } = classInfo;
 
     return newClass;
   }

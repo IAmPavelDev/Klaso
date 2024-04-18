@@ -1,0 +1,16 @@
+.wrapper {
+  padding: 10px;
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: var(--dark-grey);
+  transition: filter 0.3s 0.1s ease;
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wrapper:hover {
+    filter: drop-shadow(0 0 2px var(--blue));
+  }
+}

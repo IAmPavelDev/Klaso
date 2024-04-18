@@ -1,4 +1,11 @@
+import {
+  isStudentOmitPwd,
+  isTaskType,
+  isTeacherOmitPwd,
+} from "@/helpers/typecheck";
 import ClassService from "@/services/classes/Classes.server";
+import TaskService from "@/services/tasks/Tasks.server";
+import StudentService from "@/services/users/Student.server";
 import TeacherService from "@/services/users/Teacher.server";
 import { ClassInfo } from "@/widgets/ClassInfo";
 import { LoaderFunctionArgs, json } from "@remix-run/node";
@@ -13,18 +20,45 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   if (!classInfo) return;
 
-  const teacherInfo = await TeacherService.getById(classInfo.teacher);
+  const teacherQuery = TeacherService.getById(classInfo.teacher);
 
-  if (!teacherInfo) return;
+  const studentQueries = classInfo.students.map((id: string) =>
+    StudentService.getById(id)
+  );
+  const taskQueries = classInfo.tasks.map((id: string) =>
+    TaskService.getById(id)
+  );
 
-  return json({ classInfo, teacherInfo });
+  const studentsQuery = Promise.all(studentQueries);
+  const tasksQuery = Promise.all(taskQueries);
+
+  const [studentsInfo, tasksInfo, teacherInfo] = await Promise.all([
+    studentsQuery,
+    tasksQuery,
+    teacherQuery,
+  ]);
+
+  if (
+    !studentsInfo.every(isStudentOmitPwd) ||
+    !tasksInfo.every(isTaskType) ||
+    !isTeacherOmitPwd(teacherInfo)
+  )
+    return;
+
+  return json({ classInfo, teacherInfo, studentsInfo, tasksInfo });
 };
 
 export default function ClassPage() {
-  const { classInfo, teacherInfo } = useLoaderData<typeof loader>();
+  const { tasksInfo, classInfo, teacherInfo, studentsInfo } =
+    useLoaderData<typeof loader>();
   return (
     <>
-      <ClassInfo classInfo={classInfo} teacherInfo={teacherInfo} />
+      <ClassInfo
+        studentsInfo={studentsInfo}
+        classInfo={classInfo}
+        teacherInfo={teacherInfo}
+        tasksInfo={tasksInfo}
+      />
 
       <Outlet />
     </>

@@ -1,13 +1,12 @@
 .wrapper {
   display: flex;
+  height: calc(100lvh - 56px);
 }
 
 .wrapper__info {
   max-width: 400px;
   width: 80vw;
   border-right: 4px var(--dark-grey) solid;
-  height: calc(100lvh - 90px);
-  max-height: calc(100lvh - 90px);
   color: var(--white);
   display: flex;
   flex-direction: column;
@@ -56,12 +55,13 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 10px;
 }
 
 .tasks__create {
   display: flex;
   justify-content: center;
+  padding: 10px;
+  padding-bottom: 10px;
 }
 
 .create__addBtn {
@@ -88,4 +88,13 @@
   .create__addBtn:hover {
     filter: drop-shadow(0 0 2px var(--blue));
   }
+}
+
+.tasks__list {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  overflow-y: auto;
+  padding: 10px;
+  padding-top: 5px;
 }

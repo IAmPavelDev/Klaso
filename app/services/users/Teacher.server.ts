@@ -120,7 +120,7 @@ class Teacher {
     teacherId: string
   ): Promise<TeacherOmitPwd | undefined> {
     if (!classId || !teacherId) return;
-    const teacher = await this.model.findOne();
+    const teacher = await this.model.findOne({ id: teacherId });
 
     if (!teacher) return;
 
