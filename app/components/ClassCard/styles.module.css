@@ -8,6 +8,7 @@
   transition: filter 0.3s 0.1s ease;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 10px;
 }
 
@@ -43,10 +44,36 @@
   background-color: var(--dark-grey);
   border-radius: 10px;
   padding: 10px;
+  height: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tasks__task {
+  align-self: flex-start;
+}
+
+.task__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 20px;
+}
+
+.task__descr {
+  font-size: 18px;
+  padding-top: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 
 .tasks__placeholder {
-  height: 120px;
   display: flex;
   justify-content: center;
   align-items: center;

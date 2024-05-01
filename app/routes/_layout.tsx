@@ -1,4 +1,5 @@
 import ClassService from "@/services/classes/Classes.server";
+import TaskService from "@/services/tasks/Tasks.server";
 import TeacherService from "@/services/users/Teacher.server";
 import { ClassType } from "@/types/Class";
 import { Classes } from "@/widgets/Classes";
@@ -22,17 +23,37 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       classInfo && TeacherService.getById(classInfo.teacher)
   );
 
-  const teachers = (await Promise.all(teachersQueries)).filter(
+  const firstTasksQueries = classes
+    .filter((c): c is ClassType => Boolean(c))
+    .map((classInfo) => classInfo.tasks[classInfo.tasks.length - 1])
+    .map((id: string) => TaskService.getById(id));
+
+  const teachersDataQuery = Promise.all(teachersQueries);
+  const firstTasksQuery = Promise.all(firstTasksQueries);
+
+  const [teachersDirty, firstsTasksDirty] = await Promise.all([
+    teachersDataQuery,
+    firstTasksQuery,
+  ]);
+
+  const teachers = teachersDirty.filter(
     (t) => typeof t === "object" && Object.keys(t).length > 0
   );
 
-  return json({ classes, teachers });
+  const firstTasks = firstsTasksDirty.filter(
+    (t) => typeof t === "object" && Object.keys(t).length > 0
+  );
+
+  return json({ classes, teachers, firstTasks });
 };
 
 export default function Component() {
   const userType = useStore((store) => store.userType);
-  const { classes: classesData, teachers: teachersData } =
-    useLoaderData<typeof loader>();
+  const {
+    classes: classesData,
+    teachers: teachersData,
+    firstTasks,
+  } = useLoaderData<typeof loader>();
 
   return (
     <div
@@ -42,7 +63,11 @@ export default function Component() {
       }}
     >
       {userType === "teacher" && <ClassesHead />}
-      <Classes classesData={classesData} teachersData={teachersData} />
+      <Classes
+        classesData={classesData}
+        teachersData={teachersData}
+        firstTasks={firstTasks}
+      />
       <Outlet />
     </div>
   );

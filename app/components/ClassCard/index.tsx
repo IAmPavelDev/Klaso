@@ -2,10 +2,16 @@ import { ClassType } from "@/types/Class";
 import { FC } from "react";
 import styles from "./styles.module.css";
 import { TeacherOmitPwd } from "@/types/Teacher";
+import { TaskCard } from "../TaskCard";
+import { TaskType } from "@/types/Task";
 
 export const ClassCard: FC<{
-  data: { classInfo: ClassType; teacherInfo: TeacherOmitPwd | undefined };
-}> = ({ data: { classInfo, teacherInfo } }) => {
+  data: {
+    classInfo: ClassType;
+    teacherInfo: TeacherOmitPwd | undefined;
+    firstTask: TaskType | undefined;
+  };
+}> = ({ data: { classInfo, teacherInfo, firstTask } }) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.wrapper__head}>
@@ -20,16 +26,16 @@ export const ClassCard: FC<{
         )}
       </div>
       <div className={styles.wrapper__tasks}>
-        {(() => {
-          const task = classInfo.tasks[0];
-          if (!task)
-            return (
-              <div className={styles.tasks__placeholder}>
-                Створіть перше завдання
-              </div>
-            );
-          return <div className={styles.tasks__title}></div>;
-        })()}
+        {firstTask ? (
+          <div className={styles.tasks__task}>
+            <p className={styles.task__title}>{firstTask.title}</p>
+            <p className={styles.task__descr}>{firstTask.description}</p>
+          </div>
+        ) : (
+          <div className={styles.tasks__placeholder}>
+            Створіть перше завдання
+          </div>
+        )}
       </div>
       <div className={styles.wrapper__footer}>
         <p className={styles.footer__date}>
