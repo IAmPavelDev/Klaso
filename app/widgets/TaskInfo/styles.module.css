@@ -1,0 +1,7 @@
+.wrapper {
+  display: flex;
+}
+
+.wrapper div:first-child {
+  max-width: 800px;
+}
