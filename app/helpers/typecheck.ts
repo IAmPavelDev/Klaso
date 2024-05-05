@@ -1,4 +1,5 @@
 import { CreateClassType } from "@/types/Class";
+import { CreateResponseType } from "@/types/Response";
 import { StudentOmitPwd } from "@/types/Student";
 import { CreateTaskType, TaskType } from "@/types/Task";
 import { TeacherOmitPwd } from "@/types/Teacher";
@@ -58,5 +59,15 @@ export const isTaskType = (obj: any): obj is TaskType => {
     "deadLine" in obj &&
     "class" in obj &&
     "responses" in obj
+  );
+};
+
+export const isCreateResponseType = (obj: any): obj is CreateResponseType => {
+  return (
+    "title" in obj &&
+    "description" in obj &&
+    "attachments" in obj &&
+    "task" in obj &&
+    "student" in obj
   );
 };

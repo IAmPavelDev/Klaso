@@ -2,8 +2,12 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
-  width: 100%;
+  width: 100vw;
+  max-width: 600px;
   padding: 22px 25px;
+  border-right: 4px solid var(--dark-grey);
+  height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 
 .wrapper__head {
@@ -28,13 +32,54 @@
   border-radius: 10px;
 }
 
+.wrapper__attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.wrapper__buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.wrapper__buttons > * {
+  padding: 10px 15px;
+  font-size: 16px;
+  font-family: var(--NunitoFont);
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .buttons__upload {
   position: relative;
   cursor: pointer;
+  background-color: var(--grey);
+  color: var(--blue);
+  border: 1px solid var(--dark-grey);
+  filter: drop-shadow(0 0 0px var(--blue));
+  transition: filter 0.3s 0.1s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .buttons__upload:hover {
+    filter: drop-shadow(0 0 1px var(--blue));
+  }
 }
 
 .buttons__upload > * {
   cursor: pointer;
+}
+
+.buttons__send,
+.buttons__upload > label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .buttons__upload input {
@@ -47,4 +92,17 @@
   opacity: 0;
   font-size: 0;
   z-index: -1;
+}
+
+.buttons__send {
+  background-color: var(--dark-grey);
+  color: var(--blue);
+  filter: drop-shadow(0 0 2px var(--blue));
+  transition: filter 0.3s 0.1s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .buttons__send:hover {
+    filter: drop-shadow(0 0 4px var(--blue));
+  }
 }

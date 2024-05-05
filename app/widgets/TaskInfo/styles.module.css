@@ -1,7 +1,23 @@
 .wrapper {
   display: flex;
+  display: flex;
+  position: fixed;
 }
 
-.wrapper div:first-child {
-  max-width: 800px;
+.wrapper__task {
+  overflow-y: auto;
+  max-width: calc(100vw - 550px);
+  height: calc(100vh - 106px);
+  font-family: var(--NunitoFont);
+  color: var(--white);
+  padding: 22px 25px;
+}
+
+.task__title {
+  font-size: 24px;
+  padding-bottom: 10px;
+}
+
+.task__description {
+  font-size: 16px;
 }

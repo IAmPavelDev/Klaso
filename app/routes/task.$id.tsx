@@ -1,5 +1,7 @@
 import { isTaskType } from "@/helpers/typecheck";
+import ResponseService from "@/services/responses/Responses.server";
 import TaskService from "@/services/tasks/Tasks.server";
+import { ResponsePreviewType } from "@/types/Response";
 import { TaskInfo } from "@/widgets/TaskInfo";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -12,10 +14,28 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   if (!isTaskType(taskData)) return redirect("/");
 
-  return json(taskData);
+  const responsePrevs = await ResponseService.getByTaskId(
+    taskData.id,
+    "id title created"
+  );
+
+  if (
+    !responsePrevs.every(
+      (prev: any): prev is ResponsePreviewType =>
+        "id" in prev && "title" in prev && "created" in prev
+    )
+  )
+    return json({
+      taskData,
+      responsePrevs: [] as ResponsePreviewType[],
+    });
+
+  console.log(responsePrevs);
+
+  return json({ taskData, responsePrevs });
 };
 
 export default function Task() {
-  const taskData = useLoaderData<typeof loader>();
-  return <TaskInfo data={taskData} />;
+  const { taskData, responsePrevs } = useLoaderData<typeof loader>();
+  return <TaskInfo data={taskData} responsePrevs={responsePrevs} />;
 }

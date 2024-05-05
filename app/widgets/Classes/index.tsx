@@ -11,7 +11,6 @@ export const Classes: FC<{
   teachersData: Array<TeacherOmitPwd>;
   firstTasks: Array<TaskType>;
 }> = ({ classesData, teachersData, firstTasks }) => {
-  console.log("hi");
   return (
     <div className={styles.wrapper}>
       {Array.from(classesData)
