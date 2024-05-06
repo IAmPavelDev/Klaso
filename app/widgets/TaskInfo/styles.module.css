@@ -1,13 +1,11 @@
 .wrapper {
   display: flex;
-  display: flex;
   position: fixed;
+  /* height: calc(100vh - 106px); */
 }
 
 .wrapper__task {
-  overflow-y: auto;
   max-width: calc(100vw - 550px);
-  height: calc(100vh - 106px);
   font-family: var(--NunitoFont);
   color: var(--white);
   padding: 22px 25px;
@@ -20,4 +18,88 @@
 
 .task__description {
   font-size: 16px;
+}
+
+.wrapper__response {
+  border-right: 4px solid var(--dark-grey);
+  overflow-y: auto;
+  height: calc(100vh - 56px);
+}
+
+.responses__open {
+  display: flex;
+  padding: 20px;
+  background-color: var(--grey);
+  margin: 22px 25px;
+  border-radius: 10px;
+  border: 2px solid var(--light);
+  color: var(--white);
+  margin-bottom: 0;
+  cursor: pointer;
+  font-family: var(--NunitoFont);
+  font-size: 18px;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s 0.1s ease;
+}
+
+.responses__open p:first-child {
+  font-weight: 600;
+  letter-spacing: 0px;
+}
+
+.responses__open > svg {
+  transform-origin: center center;
+  transition: all 0.3s 0.1s ease;
+}
+
+.responses__open > svg > path {
+  transition: all 0.3s 0.1s ease;
+  fill: var(--light);
+  stroke: var(--light);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .responses__open:hover > svg > path {
+    fill: var(--blue);
+    stroke: var(--blue);
+  }
+  .responses__open:hover {
+    filter: drop-shadow(0 0 2px var(--blue));
+  }
+}
+
+.rotate {
+  transform: rotateX(180deg);
+}
+
+.responses__item {
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 25px;
+  background-color: var(--grey);
+  border-radius: 10px;
+  margin: 22px 25px;
+  max-width: 550px;
+  gap: 10px;
+}
+
+.responses__item p {
+  text-decoration: none;
+  color: var(--white);
+  font-family: var(--NunitoFont);
+}
+
+.responses__item p:first-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.responses__item p:last-child {
+  flex: 1;
+  text-align: right;
+  white-space: nowrap;
 }

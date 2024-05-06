@@ -1,9 +1,10 @@
 import { Input } from "@/components/Input";
 import styles from "./styles.module.css";
-import { ChangeEvent, useEffect, useId, useState } from "react";
+import { ChangeEvent, FC, useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Attachment } from "@/components/Attachment";
 import { useFetcher } from "@remix-run/react";
+import { useStore } from "@/zustand/store";
 
 type ResponseForm = {
   title: string;
@@ -13,10 +14,12 @@ type ResponseForm = {
 
 const FILE_SIZE_LIMIT_IN_BYTES = 26214400;
 
-export const ResponseForm = () => {
+export const ResponseForm: FC<{ taskId: string }> = ({ taskId }) => {
   const fileId = useId();
 
-  const { register, handleSubmit, formState } =
+  const studentId = useStore((store) => store.state.id);
+
+  const { register, handleSubmit, getValues, reset } =
     useForm<Omit<ResponseForm, "attachments">>();
 
   const [attachments, setAttachments] = useState<ResponseForm["attachments"]>(
@@ -27,11 +30,39 @@ export const ResponseForm = () => {
 
   const SubmitFormData = useFetcher();
 
-  useEffect(() => {
-    console.log(SubmitFiles.data);
-  }, [SubmitFiles.data]);
+  /* useEffect(() => { */
+  /*   console.log("files", SubmitFiles.data); */
+  /*   const formInfo = new FormData(); */
+  /**/
+  /*   const values = getValues(); */
+  /**/
+  /*   formInfo.append("title", values.title); */
+  /*   formInfo.append("description", values.description); */
+  /*   formInfo.append("attachments", JSON.stringify([])); */
+  /*   formInfo.append("task", taskId); */
+  /*   formInfo.append("student", studentId); */
+  /**/
+  /*   SubmitFormData.submit(formInfo, { */
+  /*     method: "POST", */
+  /*     action: "/response/new", */
+  /*     navigate: false, */
+  /*     encType: "multipart/form-data", */
+  /*   }); */
+  /* }, [SubmitFiles.data]); */
 
   /* console.log(SubmitToServer.data); */
+
+  useEffect(() => {
+    if (
+      typeof SubmitFormData.data === "object" &&
+      SubmitFormData.data !== null &&
+      "status" in SubmitFormData.data &&
+      SubmitFormData.data.status === "success"
+    ) {
+      reset();
+      setAttachments([]);
+    }
+  }, [SubmitFormData.data]);
 
   const pushFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) return;
@@ -44,17 +75,34 @@ export const ResponseForm = () => {
   };
 
   const submit = (data: Omit<ResponseForm, "attachments">) => {
-    const formdata = new FormData();
+    /* const formdata = new FormData(); */
 
     /* for (const [key, value] of Object.entries(data)) { */
     /*   formdata.append(key, value); */
     /* } */
 
-    attachments.forEach((file) => formdata.append(file.name, file));
+    /* attachments.forEach((file) => formdata.append(file.name, file)); */
+    /**/
+    /* SubmitFiles.submit(formdata, { */
+    /*   method: "POST", */
+    /*   action: "/file/upload", */
+    /*   navigate: false, */
+    /*   encType: "multipart/form-data", */
+    /* }); */
 
-    SubmitFiles.submit(formdata, {
+    const formInfo = new FormData();
+
+    const values = getValues();
+
+    formInfo.append("title", values.title);
+    formInfo.append("description", values.description);
+    formInfo.append("attachments", JSON.stringify([]));
+    formInfo.append("task", taskId);
+    formInfo.append("student", studentId);
+
+    SubmitFormData.submit(formInfo, {
       method: "POST",
-      action: "/file/upload",
+      action: "/response/new",
       navigate: false,
       encType: "multipart/form-data",
     });
@@ -103,7 +151,7 @@ export const ResponseForm = () => {
         })}
       </div>
       <div className={styles.wrapper__buttons}>
-        <button className={styles.buttons__upload}>
+        <button type="button" className={styles.buttons__upload}>
           <label htmlFor={fileId}>
             <svg
               width="29"

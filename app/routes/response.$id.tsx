@@ -1,7 +1,6 @@
 import { isCreateResponseType } from "@/helpers/typecheck";
 import { StudentGuard } from "@/services/guards/Student.server";
 import ResponseService from "@/services/responses/Responses.server";
-import { CreateResponseType } from "@/types/Response";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -17,14 +16,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   const responseData = Object.fromEntries(await request.formData());
 
+  console.log(responseData);
+
   if (!StudentGuard(request) || !isCreateResponseType(responseData))
     return redirect("/");
 
-  const newTask = await ResponseService.create(responseData);
+  const newResponse = await ResponseService.create(responseData);
 
-  if (!newTask || Object.keys(newTask).length === 0) return redirect("/");
+  if (!newResponse || Object.keys(newResponse).length === 0)
+    return redirect("/");
 
-  return redirect("/task/" + newTask.task);
+  return json({ status: "success" });
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -43,5 +45,5 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function Response() {
   const response = useLoaderData<typeof loader>();
 
-  return <></>;
+  return <>{response.title}</>;
 }
