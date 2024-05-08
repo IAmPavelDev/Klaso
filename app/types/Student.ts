@@ -4,25 +4,21 @@ export type Student = {
   name: string;
   surname: string;
   fatherName: string;
-  courseStart: string;
-  courseEnd: string;
+  about: string;
   classes: Array<string>;
-  tasksTodo: Array<string>;
-  tasksDone: Array<string>;
+  tasks: Array<string>;
   major: string;
-  year: number;
   email: string;
 };
 
-export type StudentOmitPwd = Omit<Student, "password" | "year">;
+export type StudentOmitPwd = Omit<Student, "password">;
 
 export interface CreateStudentData {
   password: string;
   name: string;
   surname: string;
   fatherName: string;
-  courseStart: string;
-  courseEnd: string;
+  about: string;
   major: string;
   email: string;
 }

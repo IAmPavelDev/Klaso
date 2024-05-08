@@ -1,6 +1,8 @@
 import { isCreateResponseType } from "@/helpers/typecheck";
 import { StudentGuard } from "@/services/guards/Student.server";
 import ResponseService from "@/services/responses/Responses.server";
+import StudentService from "@/services/users/Student.server";
+import { ResponseInfo } from "@/widgets/ResponseInfo";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -15,8 +17,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (!responseId) return redirect("/");
 
   const responseData = Object.fromEntries(await request.formData());
-
-  console.log(responseData);
 
   if (!StudentGuard(request) || !isCreateResponseType(responseData))
     return redirect("/");
@@ -39,11 +39,16 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   if (!responseInfo || Object.keys(responseInfo).length === 0)
     return redirect("/");
 
-  return json(responseInfo);
+  const studentInfo = await StudentService.getById(responseInfo.student);
+
+  if (!studentInfo || Object.keys(studentInfo).length === 0)
+    return redirect("/");
+
+  return json({ responseInfo, studentInfo });
 };
 
 export default function Response() {
-  const response = useLoaderData<typeof loader>();
+  const { responseInfo, studentInfo } = useLoaderData<typeof loader>();
 
-  return <>{response.title}</>;
+  return <ResponseInfo data={responseInfo} studentInfo={studentInfo} />;
 }

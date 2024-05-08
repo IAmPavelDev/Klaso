@@ -30,8 +30,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       responsePrevs: [] as ResponsePreviewType[],
     });
 
-  console.log(responsePrevs);
-
   return json({ taskData, responsePrevs });
 };
 

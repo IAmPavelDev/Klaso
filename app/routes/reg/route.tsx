@@ -16,8 +16,7 @@ const checkStudentData = (obj: any): obj is CreateStudentData => {
     "surname" in obj &&
     "fatherName" in obj &&
     "major" in obj &&
-    "courseStart" in obj &&
-    "courseEnd" in obj
+    "about" in obj
   );
 };
 const checkTeacherData = (obj: any): obj is CreateTeacherData => {
@@ -26,7 +25,8 @@ const checkTeacherData = (obj: any): obj is CreateTeacherData => {
     "password" in obj &&
     "name" in obj &&
     "surname" in obj &&
-    "fatherName" in obj
+    "fatherName" in obj &&
+    "about" in obj
   );
 };
 

@@ -15,12 +15,10 @@ const StudentSchema = new mongoose.Schema<StudentType>({
   surname: String,
   fatherName: String,
   email: String,
-  courseStart: String,
-  courseEnd: String,
+  about: String,
   classes: [String],
   major: String,
-  tasksTodo: [String],
-  tasksDone: [String],
+  tasks: [String],
 });
 
 declare global {
@@ -112,9 +110,7 @@ class Student {
       ...data,
       id: uuidv4(),
       classes: [],
-      tasksTodo: [],
-      tasksDone: [],
-      year: new Date().getFullYear() - Number(data.courseStart),
+      tasks: [],
       password: hashedPassword,
     };
 

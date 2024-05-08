@@ -5,7 +5,7 @@ import { ClassType } from "@/types/Class";
 import { Classes } from "@/widgets/Classes";
 import { ClassesHead } from "@/widgets/ControlHead";
 import { useStore } from "@/zustand/store";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { Outlet, json, useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
@@ -15,7 +15,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async () => {
   const classes = await ClassService.getAll();
 
   const teachersQueries = classes.map(

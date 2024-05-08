@@ -1,36 +1,60 @@
 .wrapper {
+  overflow: hidden;
+  text-overflow: ellipsis;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center;
   gap: 8px;
   color: var(--white);
   font-family: var(--NunitoFont);
-  border: 2px solid var(--grey);
   border-radius: 5px;
   padding: 10px;
   transition: all 300ms linear;
+  background-color: var(--grey);
+  filter: drop-shadow(0 0 0px var(--blue));
 }
 
-.wrapper__name,
-.wrapper__major {
-  text-align: right;
+.wrapper__icon {
+  width: 35px;
+  height: 35px;
+  min-width: 35px;
+  min-height: 35px;
+  border-radius: 50%;
+  background-color: var(--light-grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper__content {
+  width: calc(100% - 60px);
+}
+
+.content__name,
+.content__major {
+  text-align: left;
   text-overflow: ellipsis;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
 }
+.content__name > p,
+.content__major > p {
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
-.wrapper__name {
+.content__name {
   font-size: 20px;
 }
 
-.wrapper__major {
+.content__major {
   font-size: 18px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .wrapper:hover {
-    border: 2px solid var(--blue);
+    filter: drop-shadow(0 0 2px var(--blue));
   }
 }

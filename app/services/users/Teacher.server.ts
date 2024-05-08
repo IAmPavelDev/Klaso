@@ -15,6 +15,7 @@ const TeacherSchema = new mongoose.Schema<TeacherType>({
   surname: String,
   fatherName: String,
   email: String,
+  about: String,
   classes: [String],
 });
 

@@ -48,8 +48,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await getUserSession(request);
   const userId = session.get("userId");
 
-  const StudentQuery = await StudentService.getById(userId);
-  const TeacherQuery = await TeacherService.getById(userId);
+  const StudentQuery = StudentService.getById(userId);
+  const TeacherQuery = TeacherService.getById(userId);
 
   const [student, teacher] = await Promise.all([StudentQuery, TeacherQuery]);
 

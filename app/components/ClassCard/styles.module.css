@@ -61,6 +61,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 20px;
+  word-break: break-word;
 }
 
 .task__descr {
@@ -71,6 +72,7 @@
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 .tasks__placeholder {

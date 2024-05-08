@@ -6,15 +6,14 @@ import { TeacherOmitPwd } from "@/types/Teacher";
 
 export const isStudentOmitPwd = (obj: any): obj is StudentOmitPwd => {
   return (
+    typeof obj === "object" &&
     "id" in obj &&
     "name" in obj &&
     "surname" in obj &&
     "fatherName" in obj &&
-    "courseStart" in obj &&
-    "courseEnd" in obj &&
+    "about" in obj &&
     "classes" in obj &&
-    "tasksTodo" in obj &&
-    "tasksDone" in obj &&
+    "tasks" in obj &&
     "major" in obj &&
     "email" in obj
   );
@@ -22,10 +21,12 @@ export const isStudentOmitPwd = (obj: any): obj is StudentOmitPwd => {
 
 export const isTeacherOmitPwd = (obj: any): obj is TeacherOmitPwd => {
   return (
+    typeof obj === "object" &&
     "id" in obj &&
     "name" in obj &&
     "surname" in obj &&
     "fatherName" in obj &&
+    "about" in obj &&
     "email" in obj &&
     "classes" in obj
   );
@@ -33,6 +34,7 @@ export const isTeacherOmitPwd = (obj: any): obj is TeacherOmitPwd => {
 
 export const isCreateClassType = (obj: any): obj is CreateClassType => {
   return (
+    typeof obj === "object" &&
     "title" in obj &&
     "description" in obj &&
     "major" in obj &&
@@ -43,6 +45,7 @@ export const isCreateClassType = (obj: any): obj is CreateClassType => {
 
 export const isCreateTaskType = (obj: any): obj is CreateTaskType => {
   return (
+    typeof obj === "object" &&
     "title" in obj &&
     "description" in obj &&
     "deadLine" in obj &&
@@ -52,6 +55,7 @@ export const isCreateTaskType = (obj: any): obj is CreateTaskType => {
 
 export const isTaskType = (obj: any): obj is TaskType => {
   return (
+    typeof obj === "object" &&
     "id" in obj &&
     "title" in obj &&
     "description" in obj &&
@@ -64,6 +68,7 @@ export const isTaskType = (obj: any): obj is TaskType => {
 
 export const isCreateResponseType = (obj: any): obj is CreateResponseType => {
   return (
+    typeof obj === "object" &&
     "title" in obj &&
     "description" in obj &&
     "attachments" in obj &&

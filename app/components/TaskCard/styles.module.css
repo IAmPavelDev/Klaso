@@ -26,7 +26,6 @@
 }
 
 .head__title {
-  /* width: 35ch; */
   flex: 1;
   font-size: 1.25rem;
   overflow: hidden;
@@ -49,6 +48,7 @@
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 .wrapper__bottom {

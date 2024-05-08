@@ -15,12 +15,7 @@ export const StudentProfile: FC<{ data: StudentOmitPwd }> = ({ data }) => {
         className={styles.name}
       >{`${data.surname} ${data.name} ${data.fatherName}`}</p>
       <p className={styles.major}>{data.major}</p>
-      <p className={styles.years}>
-        Роки навчання: {data.courseStart} - {data.courseEnd}
-      </p>
-      <p>
-        Студент {new Date().getFullYear() - Number(data.courseStart)}-го курсу
-      </p>
+      <p className={styles.years}>{data.about}</p>
     </>
   );
 };

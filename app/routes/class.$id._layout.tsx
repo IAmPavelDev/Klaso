@@ -8,7 +8,7 @@ import TaskService from "@/services/tasks/Tasks.server";
 import StudentService from "@/services/users/Student.server";
 import TeacherService from "@/services/users/Teacher.server";
 import { ClassInfo } from "@/widgets/ClassInfo";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -43,7 +43,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     !tasksInfo.every(isTaskType) ||
     !isTeacherOmitPwd(teacherInfo)
   )
-    return;
+    return redirect("/");
 
   return json({ classInfo, teacherInfo, studentsInfo, tasksInfo });
 };

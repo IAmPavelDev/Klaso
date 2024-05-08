@@ -56,27 +56,14 @@ export const RegistrationForm: FC<FormProps> = (props) => {
             required
           />
           {userType === "student" && (
-            <>
-              <Input
-                type="text"
-                name="major"
-                placeholder="Спеціальність"
-                required
-              />
-              <Input
-                type="text"
-                name="courseStart"
-                placeholder="Рік початку навчання"
-                required
-              />
-              <Input
-                type="text"
-                name="courseEnd"
-                placeholder="Рік кінця навчання"
-                required
-              />
-            </>
+            <Input
+              type="text"
+              name="major"
+              placeholder="Спеціальність"
+              required
+            />
           )}
+          <Input type="text" name="about" placeholder="Про себе" required />
           <div className={styles.actions}>
             <Link to="/login">Увійти</Link>
             <Button type="submit" variant="outlined">

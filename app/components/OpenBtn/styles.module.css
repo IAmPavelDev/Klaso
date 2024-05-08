@@ -7,6 +7,10 @@
   background-color: var(--dark-grey);
   transition: filter 0.3s 0.1s ease;
   text-decoration: none;
+  font-family: var(--NunitoFont);
+  font-size: 16px;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
 
 @media (hover: hover) and (pointer: fine) {

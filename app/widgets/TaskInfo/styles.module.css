@@ -1,11 +1,10 @@
 .wrapper {
   display: flex;
   position: fixed;
-  /* height: calc(100vh - 106px); */
 }
 
 .wrapper__task {
-  max-width: calc(100vw - 550px);
+  max-width: calc(100vw - 704px);
   font-family: var(--NunitoFont);
   color: var(--white);
   padding: 22px 25px;
@@ -14,10 +13,12 @@
 .task__title {
   font-size: 24px;
   padding-bottom: 10px;
+  word-break: break-word;
 }
 
 .task__description {
   font-size: 16px;
+  word-break: break-word;
 }
 
 .wrapper__response {

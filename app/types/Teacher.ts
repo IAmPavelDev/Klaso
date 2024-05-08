@@ -5,6 +5,7 @@ export type TeacherType = {
   name: string;
   surname: string;
   fatherName: string;
+  about: string;
   classes: Array<string>;
 };
 
