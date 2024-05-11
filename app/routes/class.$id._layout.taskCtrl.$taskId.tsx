@@ -1,9 +1,9 @@
 import { isCreateTaskType } from "@/helpers/typecheck";
 import ClassService from "@/services/classes/Classes.server";
-import { getUserSession } from "@/services/cookie/cookieStorage.server";
+import { StudentGuard } from "@/services/guards/Student.server";
 import { TeacherGuard } from "@/services/guards/Teacher.server";
 import TaskService from "@/services/tasks/Tasks.server";
-import { CreateTaskType, TaskType } from "@/types/Task";
+import { TaskType } from "@/types/Task";
 import { TaskForm } from "@/widgets/Forms/Task";
 import {
   ActionFunctionArgs,
@@ -14,6 +14,8 @@ import {
 import { useLoaderData } from "@remix-run/react";
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  if (!(await TeacherGuard(request))) return redirect("/", 403);
+
   const { id: classId, taskId } = params;
 
   if (!classId) return redirect("/");
@@ -44,7 +46,14 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   return redirect("/class/" + classId);
 };
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  const [isTeacher, isStudent] = await Promise.all([
+    TeacherGuard(request),
+    StudentGuard(request),
+  ]);
+
+  if (!isTeacher && !isStudent) return redirect("/", 403);
+
   const { id: classId, taskId } = params;
 
   if (!classId) return redirect("/");

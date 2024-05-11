@@ -1,0 +1,39 @@
+.wrapper {
+  color: var(--white);
+  background-color: var(--grey);
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  height: fit-content;
+  padding: 10px;
+  border-radius: 10px;
+  font-family: var(--NunitoFont);
+}
+
+.wrapper__bottom,
+.wrapper__head,
+.wrapper__bottom > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wrapper__bottom > div {
+  gap: 10px;
+}
+
+.head__title {
+  font-size: 20px;
+}
+
+.head__grade {
+  font-size: 22px;
+}
+
+.wrapper__description {
+  font-size: 18px;
+}
+
+.bottom__created {
+  font-size: 16px;
+}

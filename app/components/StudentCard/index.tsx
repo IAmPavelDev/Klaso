@@ -3,6 +3,7 @@ import { StudentOmitPwd } from "@/types/Student";
 import { FC, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import studentProfileIcon from "@/icons/student.svg";
+import { Link } from "@remix-run/react";
 
 export const StudentCard: FC<{ id: string } | { data: StudentOmitPwd }> = (
   props
@@ -23,7 +24,7 @@ export const StudentCard: FC<{ id: string } | { data: StudentOmitPwd }> = (
   return (
     <>
       {data && (
-        <div className={styles.wrapper}>
+        <Link to={`/student/${data.id}`} className={styles.wrapper}>
           <div className={styles.wrapper__icon}>
             <svg
               width="22"
@@ -44,7 +45,7 @@ export const StudentCard: FC<{ id: string } | { data: StudentOmitPwd }> = (
             </p>
             <p className={styles.content__major}>{data.major}</p>
           </div>
-        </div>
+        </Link>
       )}
     </>
   );

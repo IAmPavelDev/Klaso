@@ -14,6 +14,7 @@ import { useLoaderData } from "@remix-run/react";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (!(await TeacherGuard(request))) return redirect("/", 403);
+
   const formData = await request.formData();
   const entries = formData.entries();
   const { data } = Object.fromEntries(entries);
@@ -42,7 +43,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect("/");
 };
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  if (!(await TeacherGuard(request))) return redirect("/", 403);
+
   const { id } = params;
   if (!id) return "new";
 

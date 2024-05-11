@@ -1,28 +1,27 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import styles from "./styles.module.css";
 import editBtn from "@/icons/edit.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import { useStore } from "@/zustand/store";
 import { Form, Link, useLocation } from "@remix-run/react";
 import { Button } from "@mui/material";
-import { StudentProfile } from "./Student";
 import { isStudentOmitPwd, isTeacherOmitPwd } from "@/helpers/typecheck";
-import { TeacherProfile } from "./Teacher";
+import { Profile } from "@/components/Profile";
 
-export const Profile = ({
+export const UserProfile = ({
   open,
   setIsOpen,
 }: {
   open: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const assideRef = useRef<HTMLDivElement>(null!);
-
   const [isUserLoaded, userData, userType] = useStore((state) => [
     state.isUserLoaded,
     state.state,
     state.userType,
   ]);
+
+  console.log(userData);
 
   const location = useLocation();
 
@@ -31,7 +30,7 @@ export const Profile = ({
   }, [location.pathname]);
 
   return (
-    <motion.div ref={assideRef}>
+    <motion.div>
       <AnimatePresence mode="wait">
         {open && (
           <>
@@ -67,10 +66,10 @@ export const Profile = ({
                     </button>
                   </div>
                   {userType === "student" && isStudentOmitPwd(userData) && (
-                    <StudentProfile data={userData} />
+                    <Profile data={userData} />
                   )}
                   {userType === "teacher" && isTeacherOmitPwd(userData) && (
-                    <TeacherProfile data={userData} />
+                    <Profile data={userData} />
                   )}
                 </>
               ) : (

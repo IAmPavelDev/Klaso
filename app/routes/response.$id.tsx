@@ -1,4 +1,5 @@
 import { isCreateResponseType } from "@/helpers/typecheck";
+import { getUserSession } from "@/services/cookie/cookieStorage.server";
 import { StudentGuard } from "@/services/guards/Student.server";
 import ResponseService from "@/services/responses/Responses.server";
 import StudentService from "@/services/users/Student.server";
@@ -14,6 +15,11 @@ import { useLoaderData } from "@remix-run/react";
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { id: responseId } = params;
 
+  if (!StudentGuard(request)) return redirect("/login");
+
+  const session = await getUserSession(request);
+  const studentId = session.get("userId");
+
   if (!responseId) return redirect("/");
 
   const responseData = Object.fromEntries(await request.formData());
@@ -24,6 +30,16 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const newResponse = await ResponseService.create(responseData);
 
   if (!newResponse || Object.keys(newResponse).length === 0)
+    return redirect("/");
+
+  const updatedStudent = await StudentService.pushResponse(
+    studentId,
+    newResponse.id
+  );
+
+  console.log("stud: ", updatedStudent, studentId);
+
+  if (!updatedStudent || Object.keys(updatedStudent).length === 0)
     return redirect("/");
 
   return json({ status: "success" });

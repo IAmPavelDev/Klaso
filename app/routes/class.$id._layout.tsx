@@ -51,6 +51,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export default function ClassPage() {
   const { tasksInfo, classInfo, teacherInfo, studentsInfo } =
     useLoaderData<typeof loader>();
+
   return (
     <>
       <ClassInfo

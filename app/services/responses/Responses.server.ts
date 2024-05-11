@@ -34,6 +34,24 @@ class Response {
     this.model = Model;
   }
 
+  async getAll(
+    ids?: string[],
+    select?: ProjectionType<ResponseType>
+  ): Promise<ResponseType[] | undefined> {
+    const responses = await this.model.find({ id: ids }, select).lean();
+
+    return responses.map(
+      (
+        responseInfo: mongoose.FlattenMaps<ResponseType> & {
+          _id?: mongoose.Types.ObjectId;
+        }
+      ): ResponseType => {
+        delete responseInfo._id;
+        return responseInfo;
+      }
+    );
+  }
+
   async getByTaskId(
     taskId: string,
     select?: ProjectionType<ResponseType>

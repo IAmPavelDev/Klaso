@@ -14,13 +14,13 @@ import globalStyles from "./styles/global.css";
 import resetCss from "./styles/reset.css";
 import { Header } from "./components/Header";
 import { useState } from "react";
-import { Profile } from "./components/Profiles";
 import { getUserSession } from "./services/cookie/cookieStorage.server";
 import StudentService from "./services/users/Student.server";
 import { useStore } from "./zustand/store";
 import { StudentOmitPwd } from "./types/Student";
 import TeacherService from "./services/users/Teacher.server";
 import { TeacherOmitPwd } from "./types/Teacher";
+import { UserProfile } from "./widgets/UserProfile";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -94,7 +94,7 @@ export default function App() {
       </head>
       <body>
         <Header profileState={profileState} setProfileState={setProfileState} />
-        <Profile open={profileState} setIsOpen={setProfileState} />
+        <UserProfile open={profileState} setIsOpen={setProfileState} />
         <div style={{ paddingTop: 56 }}>
           <Outlet />
         </div>

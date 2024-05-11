@@ -1,5 +1,5 @@
 import { CreateClassType } from "@/types/Class";
-import { CreateResponseType } from "@/types/Response";
+import { ResponseType, CreateResponseType } from "@/types/Response";
 import { StudentOmitPwd } from "@/types/Student";
 import { CreateTaskType, TaskType } from "@/types/Task";
 import { TeacherOmitPwd } from "@/types/Teacher";
@@ -13,7 +13,7 @@ export const isStudentOmitPwd = (obj: any): obj is StudentOmitPwd => {
     "fatherName" in obj &&
     "about" in obj &&
     "classes" in obj &&
-    "tasks" in obj &&
+    "responses" in obj &&
     "major" in obj &&
     "email" in obj
   );
@@ -73,6 +73,20 @@ export const isCreateResponseType = (obj: any): obj is CreateResponseType => {
     "description" in obj &&
     "attachments" in obj &&
     "task" in obj &&
+    "student" in obj
+  );
+};
+
+export const isResponseType = (obj: any): obj is ResponseType => {
+  return (
+    typeof obj === "object" &&
+    "id" in obj &&
+    "title" in obj &&
+    "description" in obj &&
+    "attachments" in obj &&
+    "task" in obj &&
+    "created" in obj &&
+    "grade" in obj &&
     "student" in obj
   );
 };

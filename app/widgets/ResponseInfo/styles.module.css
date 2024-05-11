@@ -73,18 +73,3 @@
   align-items: center;
   justify-content: space-between;
 }
-
-.links__share {
-  padding: 8px 10px 5px 8px;
-  border-radius: 5px;
-  background-color: var(--dark-grey);
-  filter: drop-shadow(0 0 1px var(--blue));
-  transition: filter 0.3s 0.1s ease;
-  cursor: pointer;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .links__share:hover {
-    filter: drop-shadow(0 0 3px var(--blue));
-  }
-}

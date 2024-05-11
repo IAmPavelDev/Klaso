@@ -1,12 +1,14 @@
 import ClassService from "@/services/classes/Classes.server";
+import { StudentGuard } from "@/services/guards/Student.server";
+import { TeacherGuard } from "@/services/guards/Teacher.server";
 import TaskService from "@/services/tasks/Tasks.server";
 import TeacherService from "@/services/users/Teacher.server";
 import { ClassType } from "@/types/Class";
 import { Classes } from "@/widgets/Classes";
 import { ClassesHead } from "@/widgets/ControlHead";
 import { useStore } from "@/zustand/store";
-import type { MetaFunction } from "@remix-run/node";
-import { Outlet, json, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Outlet, json, redirect, useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,7 +17,14 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const [isTeacher, isStudent] = await Promise.all([
+    TeacherGuard(request),
+    StudentGuard(request),
+  ]);
+
+  if (!isTeacher && !isStudent) return redirect("/", 403);
+
   const classes = await ClassService.getAll();
 
   const teachersQueries = classes.map(
@@ -63,11 +72,14 @@ export default function Component() {
       }}
     >
       {userType === "teacher" && <ClassesHead />}
-      <Classes
-        classesData={classesData}
-        teachersData={teachersData}
-        firstTasks={firstTasks}
-      />
+      {userType === "teacher" ||
+        (userType === "student" && (
+          <Classes
+            classesData={classesData}
+            teachersData={teachersData}
+            firstTasks={firstTasks}
+          />
+        ))}
       <Outlet />
     </div>
   );

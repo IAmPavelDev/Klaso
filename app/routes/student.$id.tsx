@@ -1,4 +1,5 @@
 import { isStudentOmitPwd } from "@/helpers/typecheck";
+import ResponseService from "@/services/responses/Responses.server";
 import StudentService from "@/services/users/Student.server";
 import { StudentProfile } from "@/widgets/StudentProfile";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
@@ -14,11 +15,17 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   if (!isStudentOmitPwd(studentInfo)) return redirect("/");
 
-  return json(studentInfo);
+  console.log("resps", studentInfo.responses);
+
+  const works = await ResponseService.getAll(studentInfo.responses);
+
+  if (!works) return redirect("/");
+
+  return json({ works, studentInfo });
 };
 
 export default function Index() {
-  const studentInfo = useLoaderData<typeof loader>();
+  const { works, studentInfo } = useLoaderData<typeof loader>();
 
-  return <StudentProfile data={studentInfo} />;
+  return <StudentProfile data={studentInfo} works={works} />;
 }

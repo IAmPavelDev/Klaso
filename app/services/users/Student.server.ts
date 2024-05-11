@@ -1,3 +1,4 @@
+import { isStudentOmitPwd } from "@/helpers/typecheck";
 import mongoose from "../db/db.server";
 import {
   CreateStudentData,
@@ -18,7 +19,7 @@ const StudentSchema = new mongoose.Schema<StudentType>({
   about: String,
   classes: [String],
   major: String,
-  tasks: [String],
+  responses: [String],
 });
 
 declare global {
@@ -96,6 +97,33 @@ class Student {
     return studentsSanitized;
   }
 
+  async pushResponse(
+    studentId: string,
+    responseId: string
+  ): Promise<StudentOmitPwd | undefined> {
+    const student = await this.model.findOne({ id: studentId });
+
+    console.log(student);
+
+    if (!student && student === null) return;
+
+    if (!("responses" in student)) return;
+
+    student.responses.push(responseId);
+
+    console.log("create", student.responses);
+
+    const { _id, password, ...studentSanitized } = (
+      await student.save()
+    ).toObject() satisfies StudentType;
+
+    console.log("sani: ", studentSanitized, isStudentOmitPwd(studentSanitized));
+
+    if (!isStudentOmitPwd(studentSanitized)) return;
+
+    return studentSanitized;
+  }
+
   async create(data: CreateStudentData): Promise<StudentOmitPwd | undefined> {
     if (!data) {
       return;
@@ -110,7 +138,7 @@ class Student {
       ...data,
       id: uuidv4(),
       classes: [],
-      tasks: [],
+      responses: [],
       password: hashedPassword,
     };
 

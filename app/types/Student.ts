@@ -6,7 +6,7 @@ export type Student = {
   fatherName: string;
   about: string;
   classes: Array<string>;
-  tasks: Array<string>;
+  responses: Array<string>;
   major: string;
   email: string;
 };

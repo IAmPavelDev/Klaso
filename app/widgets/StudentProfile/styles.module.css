@@ -1,0 +1,25 @@
+.wrapper {
+  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
+  display: flex;
+  gap: 10px;
+}
+
+.wrapper__profile {
+  height: calc(100% - 20px);
+  padding: 10px;
+  max-width: 400px;
+  width: 80vw;
+  border-right: 4px solid var(--dark-grey);
+  overflow-y: auto;
+}
+
+.wrapper__works {
+  padding: 10px;
+  width: 100%;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}

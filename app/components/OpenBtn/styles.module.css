@@ -1,7 +1,6 @@
 .wrapper {
   padding: 10px;
   color: var(--blue);
-  border: 1px solid var(--blue);
   border-radius: 5px;
   cursor: pointer;
   background-color: var(--dark-grey);
