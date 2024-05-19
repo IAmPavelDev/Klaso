@@ -14,11 +14,11 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { id } = params;
 
-  if (!id) return;
+  if (!id) return redirect("/");
 
   const classInfo = await ClassService.getById(id);
 
-  if (!classInfo) return;
+  if (!classInfo) return redirect("/");
 
   const teacherQuery = TeacherService.getById(classInfo.teacher);
 

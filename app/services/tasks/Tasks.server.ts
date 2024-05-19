@@ -1,5 +1,7 @@
 import mongoose from "@/services/db/db.server";
 import { CreateTaskType, TaskType } from "@/types/Task";
+import { filterProps } from "framer-motion";
+import { FilterQuery } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
 const TaskSchema = new mongoose.Schema<TaskType>({
@@ -79,11 +81,11 @@ class Task {
   }
 
   async update(
-    id: string,
+    filter: FilterQuery<TaskType>,
     newData: Partial<TaskType>
   ): Promise<TaskType | undefined> {
     const classUpdated = await this.model
-      .findByIdAndUpdate({ id }, newData)
+      .findOneAndUpdate(filter, newData)
       .lean();
 
     if (!classUpdated) return;
@@ -91,6 +93,40 @@ class Task {
     const { _id, ...newClass } = classUpdated;
 
     return newClass;
+  }
+
+  async pushResponse(
+    taskId: string,
+    responseId: string
+  ): Promise<TaskType | undefined> {
+    const taskInfo = await this.model.findOne({ id: taskId });
+
+    if (!taskInfo) return;
+
+    taskInfo.responses.push(responseId);
+
+    taskInfo.save();
+
+    const { _id, ...newTask } = taskInfo;
+
+    return newTask;
+  }
+
+  async removeResponse(
+    taskId: string,
+    responseId: string
+  ): Promise<TaskType | undefined> {
+    const taskInfo = await this.model.findOne({ id: taskId });
+
+    if (!taskInfo) return;
+
+    taskInfo.responses = taskInfo.responses.filter((r) => r !== responseId);
+
+    taskInfo.save();
+
+    const { _id, ...newTask } = taskInfo;
+
+    return newTask;
   }
 
   async delete(id: string): Promise<TaskType | undefined> {

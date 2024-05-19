@@ -3,16 +3,39 @@ import styles from "./styles.module.css";
 import { Link } from "@remix-run/react";
 import { RemixLinkProps } from "@remix-run/react/dist/components";
 
-export const OpenBtn: FC<
-  RemixLinkProps & React.RefAttributes<HTMLAnchorElement>
-> = ({ children, to, className, ...props }) => {
+type OpenLinkProps = {
+  type: "link";
+} & RemixLinkProps &
+  React.RefAttributes<HTMLAnchorElement>;
+
+type OpenBtnProps = {
+  type: "button";
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+export const OpenBtn: FC<OpenBtnProps | OpenLinkProps> = ({
+  children,
+  className,
+  type,
+  ...props
+}) => {
   return (
-    <Link
-      to={to}
-      className={[className ?? "", styles.wrapper].join(" ")}
-      {...props}
-    >
-      {children}
-    </Link>
+    <>
+      {type === "link" && (
+        <Link
+          className={[className ?? "", styles.wrapper].join(" ")}
+          {...(props as OpenLinkProps)}
+        >
+          {children}
+        </Link>
+      )}
+      {type === "button" && (
+        <button
+          className={[className ?? "", styles.wrapper].join(" ")}
+          {...(props as OpenBtnProps)}
+        >
+          {children}
+        </button>
+      )}
+    </>
   );
 };

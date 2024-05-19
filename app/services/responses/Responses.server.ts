@@ -1,7 +1,7 @@
 import mongoose from "@/services/db/db.server";
 import { v4 as uuidv4 } from "uuid";
 import { CreateResponseType, ResponseType } from "../../types/Response";
-import { ProjectionType } from "mongoose";
+import { FilterQuery, ProjectionType } from "mongoose";
 
 const ResponseSchema = new mongoose.Schema<ResponseType>({
   id: String,
@@ -103,11 +103,11 @@ class Response {
   }
 
   async update(
-    id: string,
+    filter: FilterQuery<ResponseType>,
     newData: Partial<ResponseType>
   ): Promise<ResponseType | undefined> {
     const responseUpdated = await this.model
-      .findByIdAndUpdate({ id }, newData)
+      .findOneAndUpdate(filter, newData)
       .lean();
 
     if (!responseUpdated) return;

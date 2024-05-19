@@ -71,6 +71,8 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
 
       fD.append("data", JSON.stringify(formData.current));
 
+      fD.set("intent", classInfo === "new" ? "create" : "update");
+
       submit(fD, {
         action: "/classCtrl/" + defaultData.id,
         method: "POST",
@@ -91,6 +93,7 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
                 placeholder="Назва"
                 className={styles.form__input}
                 required
+                defaultValue={defaultData.title}
                 {...register("title")}
               />
               <Input
@@ -100,6 +103,7 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
                 placeholder="Опис"
                 className={styles.form__input}
                 required
+                defaultValue={defaultData.description}
                 {...register("description")}
               />
               <Input
@@ -107,6 +111,7 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
                 placeholder="Спеціальність"
                 className={styles.form__input}
                 required
+                defaultValue={defaultData.major}
                 {...register("major")}
               />
               <input
@@ -149,14 +154,27 @@ export const ClassForm: FC<{ classInfo: ClassType | "new" }> = ({
             </>
           )}
         </div>
-        <button
-          type="submit"
-          onClick={SubmitForm}
-          className={[styles.form__submit, styles.submit__create].join(" ")}
-        >
-          {page === 1 && "створити"}
-          {page === 0 && "далі"}
-        </button>
+        <div className={styles.form__bottom}>
+          {page === 1 && (
+            <button
+              onClick={() => setPage(0)}
+              className={[styles.form__submit, styles.submit__create].join(" ")}
+            >
+              назад
+            </button>
+          )}
+          <button
+            type="submit"
+            name="intent"
+            value={classInfo === "new" ? "submit" : "update"}
+            onClick={SubmitForm}
+            className={[styles.form__submit, styles.submit__create].join(" ")}
+          >
+            {page === 1 && classInfo === "new" && "створити"}
+            {page === 1 && classInfo !== "new" && "зберегти"}
+            {page === 0 && "далі"}
+          </button>
+        </div>
       </div>
     </>
   );

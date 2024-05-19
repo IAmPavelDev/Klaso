@@ -21,8 +21,6 @@ export const UserProfile = ({
     state.userType,
   ]);
 
-  console.log(userData);
-
   const location = useLocation();
 
   useEffect(() => {

@@ -21,4 +21,5 @@ export type ResponsePreviewType = {
   id: string;
   title: string;
   created: string;
+  grade: number;
 };

@@ -12,12 +12,26 @@ import {
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+const DeleteClass = async (id: string) => {
+  const deletedClass = await ClassService.delete(id);
+
+  if (!deletedClass || Object.keys(deletedClass).length === 0)
+    return redirect("/", 400);
+
+  return redirect("/", 200);
+};
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (!(await TeacherGuard(request))) return redirect("/", 403);
 
+  const { id: classId } = params;
   const formData = await request.formData();
   const entries = formData.entries();
   const { data } = Object.fromEntries(entries);
+
+  const operationType = formData.get("intent");
+
+  if (classId && operationType === "delete") return DeleteClass(classId);
 
   if (typeof data !== "string") return redirect("/", 400);
 
@@ -30,17 +44,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (!isCreateClassType(classData)) return redirect("/", 400);
 
-  const newClass = await ClassService.create(classData);
+  if (operationType === "create") {
+    const newClass = await ClassService.create(classData);
 
-  if (!newClass || Object.keys(newClass).length === 0)
-    return redirect("/", 400);
+    if (!newClass || Object.keys(newClass).length === 0)
+      return redirect("/", 400);
 
-  const newTeacher = await TeacherService.pushClass(newClass.id, teacher);
+    const newTeacher = await TeacherService.pushClass(newClass.id, teacher);
 
-  if (!newTeacher || Object.keys(newTeacher).length === 0)
-    return redirect("/", 400);
+    if (!newTeacher || Object.keys(newTeacher).length === 0)
+      return redirect("/", 400);
 
-  return redirect("/");
+    return redirect(`/class/${newClass.id}`);
+  } else if (classId && operationType === "update") {
+    const updatedClass = await ClassService.update(classId, classData);
+
+    if (!updatedClass || Object.keys(updatedClass).length === 0)
+      return redirect("/", 400);
+
+    return redirect(`/class/${updatedClass.id}`);
+  }
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {

@@ -72,14 +72,13 @@ export default function Component() {
       }}
     >
       {userType === "teacher" && <ClassesHead />}
-      {userType === "teacher" ||
-        (userType === "student" && (
-          <Classes
-            classesData={classesData}
-            teachersData={teachersData}
-            firstTasks={firstTasks}
-          />
-        ))}
+      {(userType === "teacher" || userType === "student") && (
+        <Classes
+          classesData={classesData}
+          teachersData={teachersData}
+          firstTasks={firstTasks}
+        />
+      )}
       <Outlet />
     </div>
   );

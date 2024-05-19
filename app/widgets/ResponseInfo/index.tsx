@@ -1,15 +1,51 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { ResponseType } from "@/types/Response";
 import { StudentOmitPwd } from "@/types/Student";
 import { StudentCard } from "@/components/StudentCard";
 import { OpenBtn } from "@/components/OpenBtn";
 import { ShareBtn } from "@/components/ShareBtn";
+import { useStore } from "@/zustand/store";
+import { Input } from "@/components/Input";
+import { AnimatePresence, motion } from "framer-motion";
+import { useFetcher, useSubmit } from "@remix-run/react";
 
 export const ResponseInfo: FC<{
   data: ResponseType;
   studentInfo: StudentOmitPwd;
 }> = ({ data, studentInfo }) => {
+  const userType = useStore((state) => state.userType);
+  const [gradeFormOpen, setGradeFormOpen] = useState<boolean>(false);
+  const [currentGrade, setCurrentGrade] = useState<number>(data.grade);
+
+  const gradeFetcher = useFetcher();
+
+  useEffect(() => {
+    const data = gradeFetcher.data;
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "status" in data &&
+      data.status === "success"
+    ) {
+      setGradeFormOpen(false);
+    } else {
+      /* console.log("data: ", gradeFetcher.data); */
+    }
+  }, [gradeFetcher.data]);
+
+  const SubmitGrade = (grade: number) => {
+    const formData = new FormData();
+    formData.set("intent", "grade");
+    formData.set("grade", grade.toString());
+
+    gradeFetcher.submit(formData, {
+      action: `/response/${data.id}`,
+      method: "POST",
+      navigate: false,
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
@@ -42,11 +78,61 @@ export const ResponseInfo: FC<{
           <StudentCard data={studentInfo} />
           <div className={styles.bottom__links}>
             <ShareBtn />
-            <OpenBtn className={styles.links__task} to={`/task/${data.task}`}>
+            {userType === "teacher" && (
+              <OpenBtn
+                type={"button"}
+                className={styles.links__task}
+                onClick={() => setGradeFormOpen(true)}
+              >
+                Оцінити
+              </OpenBtn>
+            )}
+            <OpenBtn
+              className={styles.links__task}
+              type={"link"}
+              to={`/task/${data.task}`}
+            >
               Відкрити завдання
             </OpenBtn>
           </div>
         </div>
+        <AnimatePresence mode="wait">
+          {userType === "teacher" && gradeFormOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className={styles.wrapper__modal}
+            >
+              <div
+                className={styles.mask}
+                onClick={() => setGradeFormOpen(false)}
+              />
+              <div className={styles.gradeForm}>
+                <Input
+                  type="number"
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (value < 0) e.target.value = (0).toString();
+                    if (value > 100) e.target.value = (100).toString();
+
+                    setCurrentGrade(Number(e.target.value));
+                  }}
+                  defaultValue={data.grade}
+                />
+                <OpenBtn
+                  type="button"
+                  onClick={() => {
+                    SubmitGrade(currentGrade);
+                  }}
+                >
+                  Оцінити
+                </OpenBtn>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

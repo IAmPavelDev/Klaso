@@ -1,6 +1,5 @@
 import { isCreateTaskType } from "@/helpers/typecheck";
 import ClassService from "@/services/classes/Classes.server";
-import { StudentGuard } from "@/services/guards/Student.server";
 import { TeacherGuard } from "@/services/guards/Teacher.server";
 import TaskService from "@/services/tasks/Tasks.server";
 import { TaskType } from "@/types/Task";
@@ -13,18 +12,23 @@ import {
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
-  if (!(await TeacherGuard(request))) return redirect("/", 403);
+const UpdateTask = async (
+  formData: FormData,
+  classId: string,
+  taskId: string
+) => {
+  const { intent, ...data } = Object.fromEntries(formData);
 
-  const { id: classId, taskId } = params;
+  const updatedTask = await TaskService.update({ id: taskId }, data);
 
-  if (!classId) return redirect("/");
+  if (!updatedTask || Object.keys(updatedTask).length === 0)
+    return redirect("/class/" + classId);
 
-  if (!taskId) return redirect("/class/" + classId);
+  return redirect("/task/" + taskId);
+};
 
-  const data = Object.fromEntries(await request.formData());
-
-  if (!TeacherGuard(request)) return redirect("/class/" + classId);
+const CreateTask = async (formData: FormData, classId: string) => {
+  const { intent, ...data } = Object.fromEntries(formData);
 
   const taskData = {
     ...data,
@@ -40,19 +44,57 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   const newClass = await ClassService.pushTask(newTask.id, classId);
 
-  if (!newClass || Object.keys(newClass).length === 0)
+  if (!newClass || Object.keys(newClass).length === 0) return redirect("/");
+
+  return redirect("/task/" + newTask.id);
+};
+
+const DeleteTask = async (classId: string, taskId: string) => {
+  const task = await TaskService.getById(taskId);
+  if (task && task.responses.length > 0) return redirect("/task/" + taskId);
+
+  const deletedTask = await TaskService.delete(taskId);
+
+  if (!deletedTask || Object.keys(deletedTask).length === 0)
     return redirect("/class/" + classId);
+
+  const newClass = await ClassService.removeTask(taskId, classId);
+
+  if (!newClass || Object.keys(newClass).length === 0) return redirect("/");
 
   return redirect("/class/" + classId);
 };
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const [isTeacher, isStudent] = await Promise.all([
-    TeacherGuard(request),
-    StudentGuard(request),
-  ]);
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  if (!(await TeacherGuard(request))) return redirect("/", 403);
 
-  if (!isTeacher && !isStudent) return redirect("/", 403);
+  const { id: classId, taskId } = params;
+
+  if (!classId) return redirect("/");
+
+  if (!taskId) return redirect("/class/" + classId);
+
+  const formData = await request.formData();
+
+  const { intent } = Object.fromEntries(formData);
+
+  if (intent === "create") {
+    return CreateTask(formData, classId);
+  }
+
+  if (intent === "update") {
+    return UpdateTask(formData, classId, taskId);
+  }
+
+  if (intent === "delete") {
+    return DeleteTask(classId, taskId);
+  }
+};
+
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  const isTeacher = await TeacherGuard(request);
+
+  if (!isTeacher) return redirect("/", 403);
 
   const { id: classId, taskId } = params;
 

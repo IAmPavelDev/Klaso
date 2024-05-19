@@ -13,7 +13,9 @@ export const TaskCard: FC<{ data: TaskType }> = ({ data }) => {
       <p className={styles.wrapper__description}>{data.description}</p>
       <div className={styles.wrapper__bottom}>
         <p className={styles.bottom__deadLine}>{data.deadLine}</p>
-        <OpenBtn to={`/task/${data.id}`}>Відкрити завдання</OpenBtn>
+        <OpenBtn type="link" to={`/task/${data.id}`}>
+          Відкрити завдання
+        </OpenBtn>
       </div>
     </div>
   );

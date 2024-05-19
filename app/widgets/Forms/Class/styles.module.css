@@ -88,8 +88,10 @@
   will-change: transform;
 }
 
-.submit__create {
+.form__bottom {
   position: sticky;
+  display: flex;
+  gap: 10px;
 }
 
 .student__remove {

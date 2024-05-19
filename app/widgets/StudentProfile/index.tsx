@@ -9,7 +9,6 @@ export const StudentProfile: FC<{
   data: StudentOmitPwd;
   works: ResponseType[];
 }> = ({ data, works }) => {
-  console.log(works);
   return (
     <div className={styles.wrapper}>
       <Profile className={styles.wrapper__profile} data={data} />

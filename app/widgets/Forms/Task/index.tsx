@@ -9,7 +9,11 @@ export const TaskForm: FC<{ taskInfo: TaskType }> = ({ taskInfo }) => {
     <>
       <Link to={`/class/${taskInfo.class}`} className={styles.mask} />
       <div className={styles.container}>
-        <p>Створити нове завдання</p>
+        {taskInfo.id === "new" ? (
+          <p>Створити нове завдання</p>
+        ) : (
+          <p>Редагувати завдання</p>
+        )}
         <div className={styles.wrapper}>
           <Form
             className={styles.form}
@@ -22,6 +26,7 @@ export const TaskForm: FC<{ taskInfo: TaskType }> = ({ taskInfo }) => {
               placeholder="Назва"
               className={styles.form__input}
               required
+              defaultValue={taskInfo.title}
             />
             <Input
               type="text"
@@ -31,6 +36,7 @@ export const TaskForm: FC<{ taskInfo: TaskType }> = ({ taskInfo }) => {
               placeholder="Опис"
               className={styles.form__input}
               required
+              defaultValue={taskInfo.description}
             />
             <Input
               type="text"
@@ -38,9 +44,19 @@ export const TaskForm: FC<{ taskInfo: TaskType }> = ({ taskInfo }) => {
               placeholder="Строк сдачі"
               className={styles.form__input}
               required
+              defaultValue={taskInfo.deadLine}
             />
-            <button className={styles.form__submit} type="submit">
-              Створити завдання
+            <button
+              name="intent"
+              value={taskInfo.id === "new" ? "create" : "update"}
+              className={styles.form__submit}
+              type="submit"
+            >
+              {taskInfo.id === "new" ? (
+                <p>Створити завдання</p>
+              ) : (
+                <p>Зберегти</p>
+              )}
             </button>
           </Form>
         </div>

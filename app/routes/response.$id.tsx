@@ -1,7 +1,9 @@
 import { isCreateResponseType } from "@/helpers/typecheck";
 import { getUserSession } from "@/services/cookie/cookieStorage.server";
 import { StudentGuard } from "@/services/guards/Student.server";
+import { TeacherGuard } from "@/services/guards/Teacher.server";
 import ResponseService from "@/services/responses/Responses.server";
+import TaskService from "@/services/tasks/Tasks.server";
 import StudentService from "@/services/users/Student.server";
 import { ResponseInfo } from "@/widgets/ResponseInfo";
 import {
@@ -12,9 +14,11 @@ import {
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
+const CreateResponse = async (
+  { request, params }: ActionFunctionArgs,
+  formData: FormData
+) => {
   const { id: responseId } = params;
-
   if (!StudentGuard(request)) return redirect("/login");
 
   const session = await getUserSession(request);
@@ -22,7 +26,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   if (!responseId) return redirect("/");
 
-  const responseData = Object.fromEntries(await request.formData());
+  const responseData = Object.fromEntries(formData);
 
   if (!StudentGuard(request) || !isCreateResponseType(responseData))
     return redirect("/");
@@ -37,12 +41,51 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     newResponse.id
   );
 
-  console.log("stud: ", updatedStudent, studentId);
+  const updatedTask = await TaskService.pushResponse(
+    newResponse.task,
+    responseId
+  );
 
   if (!updatedStudent || Object.keys(updatedStudent).length === 0)
     return redirect("/");
 
+  if (!updatedTask || Object.keys(updatedTask).length === 0)
+    return redirect("/");
+
   return json({ status: "success" });
+};
+
+const GradeResponse = async (
+  { request, params }: ActionFunctionArgs,
+  formData: FormData
+) => {
+  const { id: responseId } = params;
+  if (!TeacherGuard(request)) return redirect("/login");
+
+  if (!responseId) return redirect("/");
+
+  const grade = formData.get("grade");
+
+  if (!grade) return redirect("/");
+
+  const updatedResponse = await ResponseService.update(
+    { id: responseId },
+    { grade: Number(grade) }
+  );
+
+  if (!updatedResponse || Object.keys(updatedResponse).length === 0)
+    return redirect("/");
+
+  return json({ status: "success" });
+};
+
+export const action = async (args: ActionFunctionArgs) => {
+  const { request } = args;
+  const formData = await request.formData();
+  const intent = formData.get("intent");
+
+  if (intent === "create") return CreateResponse(args, formData);
+  if (intent === "grade") return GradeResponse(args, formData);
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {

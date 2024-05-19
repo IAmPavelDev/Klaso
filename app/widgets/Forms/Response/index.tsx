@@ -100,6 +100,8 @@ export const ResponseForm: FC<{ taskId: string }> = ({ taskId }) => {
     formInfo.append("task", taskId);
     formInfo.append("student", studentId);
 
+    formInfo.set("intent", "create");
+
     SubmitFormData.submit(formInfo, {
       method: "POST",
       action: "/response/new",

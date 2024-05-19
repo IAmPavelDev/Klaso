@@ -9,13 +9,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { id } = params;
   if (!id) return redirect("/");
 
-  console.log(id);
-
   const studentInfo = await StudentService.getById(id);
 
   if (!isStudentOmitPwd(studentInfo)) return redirect("/");
-
-  console.log("resps", studentInfo.responses);
 
   const works = await ResponseService.getAll(studentInfo.responses);
 

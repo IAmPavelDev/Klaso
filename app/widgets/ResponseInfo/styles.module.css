@@ -15,6 +15,7 @@
   border-radius: 10px;
   color: var(--white);
   gap: 18px;
+  position: relative;
 }
 
 .wrapper__content p {
@@ -41,8 +42,9 @@
   gap: 5px;
 }
 
-.wrapper__head > p:last-child {
+.wrapper__head > *:last-child {
   font-size: 20px;
+  width: fit-content;
 }
 
 .wrapper__content {
@@ -72,4 +74,36 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.gradeForm {
+  position: absolute;
+  background-color: var(--light-grey);
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+.mask {
+  position: absolute;
+  inset: 0;
+  background-color: var(--grey);
+  opacity: 0.6;
+  height: 100%;
+  width: 100%;
+}
+
+.wrapper__modal {
+  position: fixed;
+  inset: 0;
+  height: 100%;
+  width: 100%;
 }

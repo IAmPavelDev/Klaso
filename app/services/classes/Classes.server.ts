@@ -1,7 +1,7 @@
 import { ClassType, CreateClassType } from "@/types/Class";
 import mongoose from "@/services/db/db.server";
 import { v4 as uuidv4 } from "uuid";
-import App from "@/root";
+import TaskService from "../tasks/Tasks.server";
 
 const ClassSchema = new mongoose.Schema<ClassType>({
   id: String,
@@ -85,7 +85,7 @@ class Class {
     newData: Partial<ClassType>
   ): Promise<ClassType | undefined> {
     const classUpdated = await this.model
-      .findByIdAndUpdate({ id }, newData)
+      .findOneAndUpdate({ id }, newData)
       .lean();
 
     if (!classUpdated) return;
@@ -112,9 +112,30 @@ class Class {
     return newClass;
   }
 
+  async removeTask(
+    taskId: string,
+    classId: string
+  ): Promise<ClassType | undefined> {
+    const classInfo = await this.model.findOne({ id: classId });
+
+    if (!classInfo) return;
+
+    classInfo.tasks = classInfo.tasks.filter((t) => t !== taskId);
+
+    classInfo.save();
+
+    const { _id, ...newClass } = classInfo;
+
+    return newClass;
+  }
+
   async delete(id: string): Promise<ClassType | undefined> {
     const classData = await this.model.findOneAndDelete({ id }).lean();
     if (!classData) return;
+
+    for (const taskId of classData.tasks) {
+      TaskService.update({ id: taskId }, { class: "" });
+    }
 
     const { _id, ...classDataReturn } = classData;
 

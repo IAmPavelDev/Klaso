@@ -16,17 +16,11 @@ export const ResponseCard: FC<{ data: ResponseType }> = ({ data }) => {
         <p className={styles.bottom__created}>{data.created}</p>
         <div>
           <ShareBtn />
-          <OpenBtn to={`/response/${data.id}`}>Відкрити роботу</OpenBtn>
+          <OpenBtn type="link" to={`/response/${data.id}`}>
+            Відкрити роботу
+          </OpenBtn>
         </div>
       </div>
     </div>
   );
 };
-
-/*
- title: string;
- description: string;
- student: string;
- created: string;
- grade: number;
-*/

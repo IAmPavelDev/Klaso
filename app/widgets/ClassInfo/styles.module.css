@@ -18,6 +18,13 @@
   text-align: center;
 }
 
+.info__ctrl {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 10px;
+}
+
 .info__title {
   font-size: 24px;
   font-weight: 500;

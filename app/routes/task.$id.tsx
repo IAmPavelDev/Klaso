@@ -16,13 +16,13 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   const responsePrevs = await ResponseService.getByTaskId(
     taskData.id,
-    "id title created"
+    "id title created grade"
   );
 
   if (
     !responsePrevs.every(
       (prev: any): prev is ResponsePreviewType =>
-        "id" in prev && "title" in prev && "created" in prev
+        "id" in prev && "title" in prev && "created" in prev && "grade" in prev
     )
   )
     return json({

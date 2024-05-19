@@ -103,21 +103,15 @@ class Student {
   ): Promise<StudentOmitPwd | undefined> {
     const student = await this.model.findOne({ id: studentId });
 
-    console.log(student);
-
     if (!student && student === null) return;
 
     if (!("responses" in student)) return;
 
     student.responses.push(responseId);
 
-    console.log("create", student.responses);
-
     const { _id, password, ...studentSanitized } = (
       await student.save()
     ).toObject() satisfies StudentType;
-
-    console.log("sani: ", studentSanitized, isStudentOmitPwd(studentSanitized));
 
     if (!isStudentOmitPwd(studentSanitized)) return;
 
