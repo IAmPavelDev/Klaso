@@ -14,14 +14,10 @@ export async function run() {
   try {
     if (db) return db;
     if (process.env.NODE_ENV === "production") {
-      db = await mongoose.connect(dbURL, {
-        useNewUrlParser: true,
-      });
+      db = await mongoose.connect(dbURL);
     } else {
       if (!global._db) {
-        global._db = await mongoose.connect(dbURL, {
-          useNewUrlParser: true,
-        });
+        global._db = await mongoose.connect(dbURL);
       }
       db = global._db;
     }
