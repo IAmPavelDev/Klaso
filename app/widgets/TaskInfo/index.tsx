@@ -103,7 +103,7 @@ export const TaskInfo: FC<{
             }
             transition={{ duration: 0.4 }}
           >
-            <ResponseForm taskId={data.id} />
+            <ResponseForm type="create" taskId={data.id} />
           </motion.div>
         </div>
       )}
@@ -170,7 +170,10 @@ export const TaskInfo: FC<{
       <div className={styles.wrapper__task}>
         {userType === "teacher" && (
           <div className={styles.task__ctrl}>
-            <EditBtn to={`/class/${data.class}/taskCtrl/${data.id}`} />
+            <EditBtn
+              type="link"
+              to={`/class/${data.class}/taskCtrl/${data.id}`}
+            />
             {data.responses.length === 0 && <DeleteBtn onClick={DeleteTask} />}
           </div>
         )}

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Attachment } from "@/components/Attachment";
 import { useFetcher } from "@remix-run/react";
 import { useStore } from "@/zustand/store";
+import { ResponseType } from "@/types/Response";
 
 type ResponseForm = {
   title: string;
@@ -14,8 +15,25 @@ type ResponseForm = {
 
 const FILE_SIZE_LIMIT_IN_BYTES = 26214400;
 
-export const ResponseForm: FC<{ taskId: string }> = ({ taskId }) => {
+export const ResponseForm: FC<{
+  type: "create" | "edit";
+  taskId: string;
+  defaultData?: ResponseType;
+}> = ({ taskId, defaultData, type }) => {
   const fileId = useId();
+
+  const defaultInfo =
+    defaultData ??
+    ({
+      id: "new",
+      title: "",
+      description: "",
+      attachments: [],
+      task: "",
+      student: "",
+      created: "",
+      grade: 0,
+    } satisfies ResponseType);
 
   const studentId = useStore((store) => store.state.id);
 
@@ -100,12 +118,12 @@ export const ResponseForm: FC<{ taskId: string }> = ({ taskId }) => {
     formInfo.append("task", taskId);
     formInfo.append("student", studentId);
 
-    formInfo.set("intent", "create");
+    formInfo.set("intent", type);
 
     SubmitFormData.submit(formInfo, {
       method: "POST",
-      action: "/response/new",
-      navigate: false,
+      action: `/response/${defaultInfo.id}`,
+      navigate: true,
       encType: "multipart/form-data",
     });
   };
@@ -113,7 +131,11 @@ export const ResponseForm: FC<{ taskId: string }> = ({ taskId }) => {
   return (
     <form className={styles.wrapper} onSubmit={handleSubmit(submit)}>
       <div className={styles.wrapper__head}>
-        <p>ЗДАТИ РОБОТУ</p>
+        <p>
+          {type === "create" && <>ЗДАТИ </>}
+          {type === "edit" && <>ОНОВИТИ </>}
+          РОБОТУ
+        </p>
       </div>
       <div className={styles.wrapper__inputs}>
         <Input
@@ -124,6 +146,7 @@ export const ResponseForm: FC<{ taskId: string }> = ({ taskId }) => {
           inputProps={{ maxLength: 100, minLength: 5 }}
           multiline
           required
+          defaultValue={defaultInfo.title}
         />
         <Input
           {...register("description")}
@@ -134,6 +157,7 @@ export const ResponseForm: FC<{ taskId: string }> = ({ taskId }) => {
           multiline
           minRows={3}
           required
+          defaultValue={defaultInfo.description}
         />
       </div>
       <div className={styles.wrapper__attachments}>
@@ -184,7 +208,8 @@ export const ResponseForm: FC<{ taskId: string }> = ({ taskId }) => {
               fill="#5294E2"
             />
           </svg>
-          здати роботу
+          {type === "create" && <p>здати роботу</p>}
+          {type === "edit" && <p>зберегти</p>}
         </button>
       </div>
     </form>

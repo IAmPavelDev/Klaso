@@ -118,6 +118,25 @@ class Student {
     return studentSanitized;
   }
 
+  async removeResponse(
+    studentId: string,
+    responseId: string
+  ): Promise<StudentOmitPwd | undefined> {
+    const studentInfo = await this.model.findOne({ id: studentId });
+
+    if (!studentInfo) return;
+
+    studentInfo.responses = studentInfo.responses.filter(
+      (r) => r !== responseId
+    );
+
+    studentInfo.save();
+
+    const { _id, ...newResponse } = studentInfo;
+
+    return newResponse;
+  }
+
   async create(data: CreateStudentData): Promise<StudentOmitPwd | undefined> {
     if (!data) {
       return;

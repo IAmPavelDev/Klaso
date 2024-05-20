@@ -9,16 +9,27 @@ import { useStore } from "@/zustand/store";
 import { Input } from "@/components/Input";
 import { AnimatePresence, motion } from "framer-motion";
 import { useFetcher, useSubmit } from "@remix-run/react";
+import { DeleteBtn } from "@/components/DeleteBtn";
+import { EditBtn } from "@/components/EditBtn";
+import { ResponseForm } from "../Forms/Response";
 
 export const ResponseInfo: FC<{
   data: ResponseType;
   studentInfo: StudentOmitPwd;
 }> = ({ data, studentInfo }) => {
-  const userType = useStore((state) => state.userType);
+  const [userId, userType] = useStore((state) => [
+    state.state.id,
+    state.userType,
+  ]);
   const [gradeFormOpen, setGradeFormOpen] = useState<boolean>(false);
   const [currentGrade, setCurrentGrade] = useState<number>(data.grade);
 
+  const [editModalShow, setEditModalShow] = useState<boolean>(false);
+
   const gradeFetcher = useFetcher();
+  const deleteFetcher = useFetcher();
+
+  useEffect(() => setEditModalShow(false), [data]);
 
   useEffect(() => {
     const data = gradeFetcher.data;
@@ -45,6 +56,19 @@ export const ResponseInfo: FC<{
       navigate: false,
     });
   };
+
+  const Delete = () => {
+    const formData = new FormData();
+    formData.set("intent", "delete");
+
+    deleteFetcher.submit(formData, {
+      action: `/response/${data.id}`,
+      method: "POST",
+      navigate: true,
+    });
+  };
+
+  const Edit = () => {};
 
   return (
     <div className={styles.container}>
@@ -86,6 +110,16 @@ export const ResponseInfo: FC<{
               >
                 Оцінити
               </OpenBtn>
+            )}
+            {userType === "student" && userId === studentInfo.id && (
+              <>
+                <DeleteBtn className={styles.bottom__delete} onClick={Delete} />
+                <EditBtn
+                  className={styles.bottom__edit}
+                  onClick={() => setEditModalShow(true)}
+                  type="button"
+                />
+              </>
             )}
             <OpenBtn
               className={styles.links__task}
@@ -132,6 +166,29 @@ export const ResponseInfo: FC<{
               </div>
             </motion.div>
           )}
+          {userType === "student" &&
+            userId === studentInfo.id &&
+            editModalShow && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className={styles.wrapper__modal}
+              >
+                <div
+                  className={styles.mask}
+                  onClick={() => setEditModalShow(false)}
+                />
+                <div className={styles.editForm}>
+                  <ResponseForm
+                    type="edit"
+                    taskId={data.task}
+                    defaultData={data}
+                  />
+                </div>
+              </motion.div>
+            )}
         </AnimatePresence>
       </div>
     </div>

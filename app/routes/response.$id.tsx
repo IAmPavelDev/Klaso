@@ -52,7 +52,7 @@ const CreateResponse = async (
   if (!updatedTask || Object.keys(updatedTask).length === 0)
     return redirect("/");
 
-  return json({ status: "success" });
+  return redirect(`/response/${newResponse.id}`);
 };
 
 const GradeResponse = async (
@@ -79,6 +79,66 @@ const GradeResponse = async (
   return json({ status: "success" });
 };
 
+const EditResponse = async (
+  { request, params }: ActionFunctionArgs,
+  formData: FormData
+) => {
+  const { id: responseId } = params;
+  const responseData = Object.fromEntries(formData);
+
+  if (!StudentGuard(request)) return redirect("/login");
+
+  const session = await getUserSession(request);
+  const studentId = session.get("userId");
+
+  if (
+    !responseId ||
+    !isCreateResponseType(responseData) ||
+    studentId !== responseData.student
+  )
+    return redirect("/");
+
+  const updatedResponse = await ResponseService.update(
+    { id: responseId },
+    responseData
+  );
+
+  if (!updatedResponse || Object.keys(updatedResponse).length === 0)
+    return redirect("/");
+
+  return redirect(`/response/${updatedResponse.id}`);
+};
+
+const DeleteResponse = async ({ request, params }: ActionFunctionArgs) => {
+  const { id: responseId } = params;
+  if (!StudentGuard(request)) return redirect("/login");
+
+  const session = await getUserSession(request);
+  const studentId = session.get("userId");
+
+  if (!responseId) return redirect("/");
+
+  const deletedResponse = await ResponseService.delete(responseId);
+
+  if (!deletedResponse || Object.keys(deletedResponse).length === 0)
+    return redirect("/");
+
+  const [updatedStudent, updatedTask] = await Promise.all([
+    StudentService.removeResponse(studentId, responseId),
+    TaskService.removeResponse(deletedResponse.task, responseId),
+  ]);
+
+  if (
+    !updatedStudent ||
+    Object.keys(updatedStudent).length === 0 ||
+    !updatedTask ||
+    Object.keys(updatedTask).length === 0
+  )
+    return redirect("/");
+
+  return redirect(`/task/${deletedResponse.task}`);
+};
+
 export const action = async (args: ActionFunctionArgs) => {
   const { request } = args;
   const formData = await request.formData();
@@ -86,6 +146,8 @@ export const action = async (args: ActionFunctionArgs) => {
 
   if (intent === "create") return CreateResponse(args, formData);
   if (intent === "grade") return GradeResponse(args, formData);
+  if (intent === "delete") return DeleteResponse(args);
+  if (intent === "edit") return EditResponse(args, formData);
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {

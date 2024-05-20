@@ -1,8 +1,6 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -10,8 +8,8 @@ import {
   json,
   useLoaderData,
 } from "@remix-run/react";
-import globalStyles from "./styles/global.css";
-import resetCss from "./styles/reset.css";
+import globalStyles from "./styles/global.css?url";
+import resetCss from "./styles/reset.css?url";
 import { Header } from "./components/Header";
 import { useState } from "react";
 import { getUserSession } from "./services/cookie/cookieStorage.server";
@@ -23,7 +21,6 @@ import { TeacherOmitPwd } from "./types/Teacher";
 import { UserProfile } from "./widgets/UserProfile";
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   { rel: "manifest", href: "/site.webmanifest" },
   { rel: "stylesheet", href: globalStyles },
   { rel: "stylesheet", href: resetCss },
@@ -100,7 +97,6 @@ export default function App() {
         </div>
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );

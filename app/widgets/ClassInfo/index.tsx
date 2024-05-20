@@ -35,7 +35,7 @@ export const ClassInfo: FC<{
       <div className={styles.wrapper__info}>
         {userType === "teacher" && (
           <div className={styles.info__ctrl}>
-            <EditBtn to={`/classCtrl/${classInfo.id}`} />
+            <EditBtn type="link" to={`/classCtrl/${classInfo.id}`} />
             <DeleteBtn onClick={Delete} />
           </div>
         )}
