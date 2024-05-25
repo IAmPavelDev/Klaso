@@ -13,7 +13,7 @@ import {
 import globalStyles from "./styles/global.css";
 import resetCss from "./styles/reset.css";
 import { Header } from "./components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getUserSession } from "./services/cookie/cookieStorage.server";
 import StudentService from "./services/users/Student.server";
 import { useStore } from "./zustand/store";
@@ -21,6 +21,8 @@ import { StudentOmitPwd } from "./types/Student";
 import TeacherService from "./services/users/Teacher.server";
 import { TeacherOmitPwd } from "./types/Teacher";
 import { UserProfile } from "./widgets/UserProfile";
+import useDimensions from "./hooks/useDimensions";
+import { HideableAssideProvider } from "./components/HideableAssideWrapper";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -69,11 +71,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function App() {
   const [profileState, setProfileState] = useState(false);
 
-  const [isUserLoaded, setState, clearState] = useStore((state) => [
-    state.isUserLoaded,
-    state.setState,
-    state.clearState,
-  ]);
+  const [isUserLoaded, setState, clearState, setIsLeftAssideFoldable] =
+    useStore((state) => [
+      state.isUserLoaded,
+      state.setState,
+      state.clearState,
+      state.setIsLeftAssideFoldable,
+    ]);
+
+  const { width } = useDimensions();
 
   const loaderData: userDataType | null = useLoaderData<typeof loader>();
 
@@ -84,6 +90,10 @@ export default function App() {
 
   if (!loaderData && isUserLoaded) clearState();
 
+  useEffect(() => {
+    setIsLeftAssideFoldable(width < 1380);
+  }, [width]);
+
   return (
     <html lang="en">
       <head>
@@ -93,14 +103,19 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Header profileState={profileState} setProfileState={setProfileState} />
-        <UserProfile open={profileState} setIsOpen={setProfileState} />
-        <div style={{ paddingTop: 56 }}>
-          <Outlet />
-        </div>
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        <HideableAssideProvider>
+          <Header
+            profileState={profileState}
+            setProfileState={setProfileState}
+          />
+          <UserProfile open={profileState} setIsOpen={setProfileState} />
+          <div className="app">
+            <Outlet />
+          </div>
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </HideableAssideProvider>
       </body>
     </html>
   );

@@ -1,12 +1,13 @@
 .container {
   display: grid;
   place-items: center;
-  height: calc(100vh - 56px);
+  min-height: calc(100vh - 76px);
   width: 100vw;
+  padding: 10px 0;
 }
 
 .wrapper {
-  width: calc(100vw - 20px);
+  width: calc(100vw - 70px);
   max-width: 900px;
   display: flex;
   flex-wrap: wrap;
@@ -67,6 +68,12 @@
   justify-content: space-between;
   width: 100%;
   gap: 18px;
+}
+
+@media screen and (max-width: 900px) {
+  .wrapper__bottom {
+    flex-direction: column;
+  }
 }
 
 .bottom__links {

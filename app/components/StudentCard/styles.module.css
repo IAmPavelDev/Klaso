@@ -13,6 +13,7 @@
   background-color: var(--grey);
   filter: drop-shadow(0 0 0px var(--blue));
   text-decoration: none;
+  width: calc(100% - 20px);
 }
 
 .wrapper__icon {

@@ -2,7 +2,6 @@ import { GetStudents } from "@/helpers/GetStudentsById.client";
 import { StudentOmitPwd } from "@/types/Student";
 import { FC, useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import studentProfileIcon from "@/icons/student.svg";
 import { Link } from "@remix-run/react";
 
 export const StudentCard: FC<{ id: string } | { data: StudentOmitPwd }> = (

@@ -6,6 +6,18 @@
   padding: 10px;
 }
 
+@media screen and (max-width: 1024px) {
+  .wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
 .wrapper__classLink {
   text-decoration: none;
 }

@@ -2,7 +2,7 @@
   background-color: var(--grey);
   padding: 10px;
   border-radius: 10px;
-  width: calc(33.3vw - 32px);
+  width: calc(100% - 32px);
   font-family: var(--NunitoFont);
   color: white;
   transition: filter 0.3s 0.1s ease;

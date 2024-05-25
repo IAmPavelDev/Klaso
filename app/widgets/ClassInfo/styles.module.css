@@ -105,3 +105,13 @@
   padding: 10px;
   padding-top: 5px;
 }
+
+.tasks__card {
+  width: calc(100% - 40px);
+}
+
+@media screen and (max-width: 760px) {
+  .tasks__list {
+    grid-template-columns: 1fr;
+  }
+}

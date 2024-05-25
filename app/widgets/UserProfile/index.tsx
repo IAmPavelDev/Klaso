@@ -41,9 +41,9 @@ export const UserProfile = ({
               onClick={() => setIsOpen((prev) => !prev)}
             />
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: "0%" }}
-              exit={{ x: "100%" }}
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: "0%", opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
               transition={{ duration: 0.3 }}
               className={styles.profileAsside}
             >

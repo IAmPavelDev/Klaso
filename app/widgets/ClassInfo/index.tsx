@@ -10,6 +10,7 @@ import { TaskCard } from "@/components/TaskCard";
 import { EditBtn } from "@/components/EditBtn";
 import { useStore } from "@/zustand/store";
 import { DeleteBtn } from "@/components/DeleteBtn";
+import { HideableAssideWrapper } from "@/components/HideableAssideWrapper";
 
 export const ClassInfo: FC<{
   classInfo: ClassType;
@@ -32,7 +33,7 @@ export const ClassInfo: FC<{
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.wrapper__info}>
+      <HideableAssideWrapper className={styles.wrapper__info}>
         {userType === "teacher" && (
           <div className={styles.info__ctrl}>
             <EditBtn type="link" to={`/classCtrl/${classInfo.id}`} />
@@ -55,9 +56,7 @@ export const ClassInfo: FC<{
             </div>
           ))}
         </div>
-
-        <div className={styles.info__studentsCtrl}></div>
-      </div>
+      </HideableAssideWrapper>
       <div className={styles.wrapper__tasks}>
         {userType === "teacher" && (
           <div className={styles.tasks__create}>
@@ -71,7 +70,9 @@ export const ClassInfo: FC<{
         )}
         <div className={styles.tasks__list}>
           {[...tasksInfo].reverse().map((task: TaskType) => (
-            <TaskCard data={task} key={task.id} />
+            <div key={task.id} className={styles.tasks__card}>
+              <TaskCard data={task} />
+            </div>
           ))}
         </div>
       </div>

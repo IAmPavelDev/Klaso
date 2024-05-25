@@ -4,7 +4,8 @@
 }
 
 .wrapper__task {
-  max-width: calc(100vw - 704px);
+  --width: calc(100vw - 704px);
+  max-width: var(--width);
   font-family: var(--NunitoFont);
   color: var(--white);
   padding: 22px 25px;
@@ -31,6 +32,8 @@
   border-right: 4px solid var(--dark-grey);
   overflow-y: auto;
   height: calc(100vh - 56px);
+  width: 100vw;
+  max-width: 650px;
 }
 
 .responses__open {

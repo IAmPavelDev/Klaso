@@ -7,6 +7,8 @@
   --white: #ffffff;
 
   --NunitoFont: "Nunito", sans-serif;
+
+  --maxWidth: 2200px;
 }
 
 body {
@@ -14,6 +16,12 @@ body {
   font-optical-sizing: auto;
   font-style: normal;
   background-color: var(--light-grey);
+}
+
+.app {
+  width: 100vw;
+  margin: 0 auto;
+  max-width: var(--maxWidth);
 }
 
 *::-webkit-scrollbar {

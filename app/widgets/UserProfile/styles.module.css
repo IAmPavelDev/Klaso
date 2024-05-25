@@ -31,6 +31,12 @@
   text-align: center;
 }
 
+@media screen and (min-width: 2200px) {
+  .profileAsside {
+    right: calc(calc(100vw - var(--maxWidth)) / 2);
+  }
+}
+
 .head {
   display: flex;
   justify-content: space-between;
