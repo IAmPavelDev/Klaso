@@ -57,6 +57,7 @@ export const HideableAssideWrapper: FC<{
     <motion.div
       className={styles.wrapper}
       animate={{ x: isShow ? "0%" : "-100%" }}
+      transition={{ duration: 0.3 }}
     >
       <AnimatePresence mode="wait">
         {isShow && (

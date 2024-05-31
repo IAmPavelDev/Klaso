@@ -25,6 +25,12 @@
   padding-bottom: 8px;
 }
 
+@media screen and (max-width: 620px) {
+  .wrapper__head {
+    flex-direction: column-reverse;
+  }
+}
+
 .head__title {
   flex: 1;
   font-size: 1.25rem;
@@ -36,6 +42,7 @@
 
 .head__created {
   flex-shrink: 0;
+  text-align: right;
 }
 
 .wrapper__description {
@@ -55,4 +62,5 @@
   display: flex;
   justify-content: space-between;
   padding-top: 10px;
+  gap: 10px;
 }

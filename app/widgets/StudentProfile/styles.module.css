@@ -24,3 +24,9 @@
   gap: 10px;
   height: fit-content;
 }
+
+@media screen and (max-width: 1024px) {
+  .wrapper__works {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,10 +8,11 @@ import { ShareBtn } from "@/components/ShareBtn";
 import { useStore } from "@/zustand/store";
 import { Input } from "@/components/Input";
 import { AnimatePresence, motion } from "framer-motion";
-import { useFetcher, useSubmit } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import { DeleteBtn } from "@/components/DeleteBtn";
 import { EditBtn } from "@/components/EditBtn";
 import { ResponseForm } from "../Forms/Response";
+import { formatDate } from "@/helpers/formatDate";
 
 export const ResponseInfo: FC<{
   data: ResponseType;
@@ -74,7 +75,7 @@ export const ResponseInfo: FC<{
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.wrapper__head}>
-          <p>
+          <p className={styles.head__created}>
             <svg
               width="16"
               height="16"
@@ -87,7 +88,7 @@ export const ResponseInfo: FC<{
                 fill="#5294E2"
               />
             </svg>
-            {data.created}
+            <span>{formatDate(data.created, "LLL")}</span>
           </p>
           <p>{data.grade}/100</p>
         </div>

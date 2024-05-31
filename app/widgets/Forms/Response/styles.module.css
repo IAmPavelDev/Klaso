@@ -38,6 +38,7 @@
   display: flex;
   width: 100%;
   justify-content: space-around;
+  gap: 10px;
 }
 
 @media screen and (max-width: 500px) {
@@ -59,6 +60,9 @@
   cursor: pointer;
   width: 193px;
   white-space: nowrap;
+  text-align: center;
+}
+.wrapper__buttons > * > *:last-child {
   text-align: center;
 }
 
@@ -87,6 +91,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: space-evenly;
 }
 
 .buttons__upload input {

@@ -4,6 +4,7 @@ import styles from "./styles.module.css";
 import { Profile } from "@/components/Profile";
 import { ResponseType } from "@/types/Response";
 import { ResponseCard } from "@/components/ResponseCard";
+import { HideableAssideWrapper } from "@/components/HideableAssideWrapper";
 
 export const StudentProfile: FC<{
   data: StudentOmitPwd;
@@ -11,7 +12,9 @@ export const StudentProfile: FC<{
 }> = ({ data, works }) => {
   return (
     <div className={styles.wrapper}>
-      <Profile className={styles.wrapper__profile} data={data} />
+      <HideableAssideWrapper>
+        <Profile className={styles.wrapper__profile} data={data} />
+      </HideableAssideWrapper>
       <div className={styles.wrapper__works}>
         {works.map((work) => (
           <ResponseCard key={work.id} data={work} />

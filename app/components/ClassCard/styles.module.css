@@ -54,6 +54,7 @@
 
 .tasks__task {
   align-self: flex-start;
+  width: 100%;
 }
 
 .task__title {

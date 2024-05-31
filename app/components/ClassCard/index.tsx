@@ -2,8 +2,8 @@ import { ClassType } from "@/types/Class";
 import { FC } from "react";
 import styles from "./styles.module.css";
 import { TeacherOmitPwd } from "@/types/Teacher";
-import { TaskCard } from "../TaskCard";
 import { TaskType } from "@/types/Task";
+import { formatDate } from "@/helpers/formatDate";
 
 export const ClassCard: FC<{
   data: {
@@ -39,7 +39,7 @@ export const ClassCard: FC<{
       </div>
       <div className={styles.wrapper__footer}>
         <p className={styles.footer__date}>
-          Створено <span>{classInfo.created}</span>
+          Створено <span>{formatDate(classInfo.created)}</span>
         </p>
       </div>
     </div>

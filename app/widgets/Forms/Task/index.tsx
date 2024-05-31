@@ -38,13 +38,15 @@ export const TaskForm: FC<{ taskInfo: TaskType }> = ({ taskInfo }) => {
               required
               defaultValue={taskInfo.description}
             />
-            <Input
-              type="text"
+            <input
+              type="datetime-local"
+              id="meeting-time"
               name="deadLine"
-              placeholder="Строк сдачі"
-              className={styles.form__input}
               required
-              defaultValue={taskInfo.deadLine}
+              placeholder="Строк сдачі"
+              className={[styles.form__input, styles.form__input_deadline].join(
+                " "
+              )}
             />
             <button
               name="intent"

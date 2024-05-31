@@ -9,6 +9,7 @@ import {
   ScrollRestoration,
   json,
   useLoaderData,
+  useLocation,
 } from "@remix-run/react";
 import globalStyles from "./styles/global.css";
 import resetCss from "./styles/reset.css";
@@ -23,6 +24,7 @@ import { TeacherOmitPwd } from "./types/Teacher";
 import { UserProfile } from "./widgets/UserProfile";
 import useDimensions from "./hooks/useDimensions";
 import { HideableAssideProvider } from "./components/HideableAssideWrapper";
+import { withEmotionCache } from "@emotion/react";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -68,18 +70,34 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return Object.keys(userData).length ? json(userData) : null;
 };
 
-export default function App() {
+const App = withEmotionCache(({ children, title }, emotionCache) => {
   const [profileState, setProfileState] = useState(false);
 
-  const [isUserLoaded, setState, clearState, setIsLeftAssideFoldable] =
-    useStore((state) => [
-      state.isUserLoaded,
-      state.setState,
-      state.clearState,
-      state.setIsLeftAssideFoldable,
-    ]);
+  const [
+    isUserLoaded,
+    setState,
+    clearState,
+    setIsLeftAssideFoldable,
+    setLeftAssideState,
+  ] = useStore((state) => [
+    state.isUserLoaded,
+    state.setState,
+    state.clearState,
+    state.setIsLeftAssideFoldable,
+    state.setLeftAssideState,
+  ]);
 
+  const location = useLocation();
   const { width } = useDimensions();
+
+  useEffect(() => {
+    setProfileState(false);
+    setLeftAssideState(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    setIsLeftAssideFoldable(width < 1380);
+  }, [width]);
 
   const loaderData: userDataType | null = useLoaderData<typeof loader>();
 
@@ -91,8 +109,15 @@ export default function App() {
   if (!loaderData && isUserLoaded) clearState();
 
   useEffect(() => {
-    setIsLeftAssideFoldable(width < 1380);
-  }, [width]);
+    // re-link sheet container
+    emotionCache.sheet.container = document.head;
+    // re-inject tags
+    const tags = emotionCache.sheet.tags;
+    emotionCache.sheet.flush();
+    tags.forEach((tag) => {
+      (emotionCache.sheet as any)._insertTag(tag);
+    });
+  }, []);
 
   return (
     <html lang="en">
@@ -119,4 +144,6 @@ export default function App() {
       </body>
     </html>
   );
-}
+});
+
+export default App;

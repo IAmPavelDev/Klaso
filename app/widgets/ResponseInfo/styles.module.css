@@ -38,6 +38,15 @@
   font-weight: 500;
 }
 
+.head__created {
+  display: flex;
+  align-items: center;
+}
+
+.head__created > span {
+  line-height: 15px;
+}
+
 .wrapper__head > p:first-child {
   font-size: 16px;
   gap: 5px;

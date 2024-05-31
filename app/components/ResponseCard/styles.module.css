@@ -10,6 +10,10 @@
   font-family: var(--NunitoFont);
 }
 
+.wrapper__bottom {
+  gap: 10px;
+}
+
 .wrapper__bottom,
 .wrapper__head,
 .wrapper__bottom > div {
@@ -36,4 +40,20 @@
 
 .bottom__created {
   font-size: 16px;
+}
+
+@media screen and (max-width: 620px) {
+  .wrapper__bottom {
+    flex-direction: column;
+  }
+
+  .bottom__created {
+    text-align: right;
+    width: 100%;
+  }
+
+  .wrapper__bottom > div {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

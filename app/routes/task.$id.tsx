@@ -19,6 +19,8 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     "id title created grade"
   );
 
+  console.log(taskData, id);
+
   if (
     !responsePrevs.every(
       (prev: any): prev is ResponsePreviewType =>

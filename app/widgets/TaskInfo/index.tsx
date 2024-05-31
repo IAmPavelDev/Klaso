@@ -53,6 +53,8 @@ export const TaskInfo: FC<{
     }
   }, [userType, isLeftAssideFoldable]);
 
+  console.log(data.responses);
+
   return (
     <div className={styles.wrapper}>
       <HideableAssideWrapper>

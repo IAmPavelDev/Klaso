@@ -3,6 +3,7 @@ import { FC } from "react";
 import styles from "./styles.module.css";
 import { OpenBtn } from "../OpenBtn";
 import { ShareBtn } from "../ShareBtn";
+import { formatDate } from "@/helpers/formatDate";
 
 export const ResponseCard: FC<{ data: ResponseType }> = ({ data }) => {
   return (
@@ -13,7 +14,9 @@ export const ResponseCard: FC<{ data: ResponseType }> = ({ data }) => {
       </div>
       <p className={styles.wrapper__description}>{data.description}</p>
       <div className={styles.wrapper__bottom}>
-        <p className={styles.bottom__created}>{data.created}</p>
+        <p className={styles.bottom__created}>
+          Сдано {formatDate(data.created, "LLL")}
+        </p>
         <div>
           <ShareBtn />
           <OpenBtn type="link" to={`/response/${data.id}`}>

@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import { Input } from "@/components/Input";
 import styles from "./styles.module.css";
 import { Button, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { PasswordInput } from "@/components/PasswordInput";
 
 export const RegistrationForm: FC<FormProps> = (props) => {
   const [userType, setUserType] = useState<"student" | "teacher">("student");
@@ -25,14 +26,16 @@ export const RegistrationForm: FC<FormProps> = (props) => {
             <FormControlLabel
               value="teacher"
               control={<Radio />}
-              label="teacher"
-              style={{ width: 100 }}
+              label="Вчитель"
+              style={{ width: 100, color: "var(--white)" }}
+              className={styles.roleSelector}
             />
             <FormControlLabel
-              style={{ width: 100 }}
+              style={{ width: 100, color: "var(--white)" }}
               value="student"
               control={<Radio />}
-              label="student"
+              label="Учень"
+              className={styles.roleSelector}
             />
           </RadioGroup>
           <Input
@@ -49,7 +52,7 @@ export const RegistrationForm: FC<FormProps> = (props) => {
             placeholder="По-батькові"
             required
           />
-          <Input
+          <PasswordInput
             type="password"
             name="password"
             placeholder="Пароль"
@@ -63,7 +66,15 @@ export const RegistrationForm: FC<FormProps> = (props) => {
               required
             />
           )}
-          <Input type="text" name="about" placeholder="Про себе" required />
+          <Input
+            multiline
+            minRows={5}
+            inputProps={{ maxLength: 300 }}
+            type="text"
+            name="about"
+            placeholder="Про себе"
+            required
+          />
           <div className={styles.actions}>
             <Link to="/login">Увійти</Link>
             <Button type="submit" variant="outlined">

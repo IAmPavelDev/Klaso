@@ -1,4 +1,7 @@
 .wrapper {
+  position: fixed;
+  inset: 0;
+  top: 56px;
   display: flex;
   width: 100vw;
   flex-direction: column;
@@ -12,14 +15,14 @@
 .form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 100vw;
+  width: calc(100vw - 80px);
   max-width: 400px;
   gap: 30px;
   background-color: var(--dark-grey);
   padding: 40px;
   border-radius: 10px;
+  overflow-y: auto;
 }
 
 .form h1 {
@@ -62,4 +65,21 @@
 .form button:hover {
   border: 1px solid var(--blue);
   background-color: rgba(82, 148, 226, 0.04);
+}
+
+.roleSelector {
+  width: 100;
+  color: var(--white);
+}
+
+.roleSelector > * {
+  color: var(--white) !important;
+}
+
+@media screen and (max-width: 620px) {
+  .form {
+    padding: 20px;
+    margin-top: 20px;
+    width: calc(100vw - 40px);
+  }
 }
