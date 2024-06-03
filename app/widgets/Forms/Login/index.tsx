@@ -23,7 +23,7 @@ export const LoginForm: FC<FormProps> = (props) => {
             required
           />
           <div className={styles.actions}>
-            <Link to="/reg">Регістрація</Link>
+            <Link to="/reg">Реєстрація</Link>
             <Button type="submit" variant="outlined">
               Увійти
             </Button>
