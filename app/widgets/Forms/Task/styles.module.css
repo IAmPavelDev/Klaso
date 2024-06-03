@@ -70,7 +70,7 @@
 
 .form__input_deadline {
   background-color: var(--grey);
-  color: var(--light);
+  color: var(--white);
   font-size: 18px;
   height: 35px;
   width: calc(100% - 20px);
