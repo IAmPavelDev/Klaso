@@ -5,13 +5,7 @@
   padding: 22px 25px;
   max-height: calc(100vh - 150px);
   margin-top: 56px;
-  width: 80vw;
-}
-
-@media screen and (max-width: 620px) {
-  .wrapper {
-    width: calc(100vw - 50px);
-  }
+  width: calc(100% - 50px);
 }
 
 .wrapper__head {
