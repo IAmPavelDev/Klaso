@@ -54,9 +54,12 @@ class Response {
 
   async getByTaskId(
     taskId: string,
-    select?: ProjectionType<ResponseType>
+    select?: ProjectionType<ResponseType>,
+    filter?: FilterQuery<ResponseType>
   ): Promise<Array<ResponseType | Partial<ResponseType> | undefined>> {
-    const responses = await this.model.find({ task: taskId }, select).lean();
+    const responses = await this.model
+      .find({ task: taskId, ...(filter ?? {}) }, select)
+      .lean();
 
     return responses.map(
       (

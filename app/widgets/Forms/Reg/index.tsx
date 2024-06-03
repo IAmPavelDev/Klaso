@@ -11,7 +11,7 @@ export const RegistrationForm: FC<FormProps> = (props) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.form}>
-        <h1>Регістрація</h1>
+        <h1>Реєстрація</h1>
         <Form {...props}>
           <RadioGroup
             row
