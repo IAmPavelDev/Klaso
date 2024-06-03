@@ -49,6 +49,19 @@ class Class {
     );
   }
 
+  async getStudentClasses(studentId: string): Promise<Array<ClassType>> {
+    const classes = await this.model
+      .find({ students: studentId })
+      .lean()
+      .exec();
+    return classes;
+  }
+
+  async getTeacherClasses(teacherId: string): Promise<Array<ClassType>> {
+    const classes = await this.model.find({ teacher: teacherId }).lean().exec();
+    return classes;
+  }
+
   async getById(searchId: string): Promise<ClassType | undefined> {
     const classData = await this.model.findOne({ id: searchId }).lean();
 

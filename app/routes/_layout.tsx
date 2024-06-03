@@ -1,4 +1,5 @@
 import ClassService from "@/services/classes/Classes.server";
+import { getUserSession } from "@/services/cookie/cookieStorage.server";
 import { StudentGuard } from "@/services/guards/Student.server";
 import { TeacherGuard } from "@/services/guards/Teacher.server";
 import TaskService from "@/services/tasks/Tasks.server";
@@ -23,9 +24,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     StudentGuard(request),
   ]);
 
-  if (!isTeacher && !isStudent) return redirect("/", 403);
+  if (!isTeacher && !isStudent) return redirect("/login", 403);
 
-  const classes = await ClassService.getAll();
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+
+  let classes;
+
+  if (isTeacher) {
+    classes = await ClassService.getTeacherClasses(userId);
+  } else if (isStudent) {
+    classes = await ClassService.getStudentClasses(userId);
+  }
+
+  if (!classes) return redirect("/login", 403);
 
   const teachersQueries = classes.map(
     (classInfo: ClassType | undefined) =>
