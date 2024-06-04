@@ -36,6 +36,12 @@
 
 .wrapper__description {
   font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 .bottom__created {
