@@ -10,6 +10,7 @@ import { FormControl, MenuItem, Select } from "@mui/material";
 import { EditBtn } from "@/components/EditBtn";
 import { DeleteBtn } from "@/components/DeleteBtn";
 import { HideableAssideWrapper } from "@/components/HideableAssideWrapper";
+import { formatDate } from "@/helpers/formatDate";
 
 export const TaskInfo: FC<{
   data: TaskType;
@@ -103,7 +104,7 @@ export const TaskInfo: FC<{
                             <p>{prev.title}</p>
                             <p>{prev.grade}/100</p>
                           </div>
-                          <p>{prev.created}</p>
+                          <p>{formatDate(prev.created)}</p>
                         </Link>
                       );
                     })}

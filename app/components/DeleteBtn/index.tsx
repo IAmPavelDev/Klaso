@@ -1,5 +1,3 @@
-import { Link } from "@remix-run/react";
-import { RemixLinkProps } from "@remix-run/react/dist/components";
 import { FC } from "react";
 import styles from "./styles.module.css";
 

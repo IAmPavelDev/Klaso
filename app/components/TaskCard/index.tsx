@@ -16,7 +16,7 @@ export const TaskCard: FC<{ data: TaskType }> = ({ data }) => {
       <p className={styles.wrapper__description}>{data.description}</p>
       <div className={styles.wrapper__bottom}>
         <p className={styles.bottom__deadLine}>
-          Сдати до {formatDate(data.deadLine)}
+          Здати до {formatDate(data.deadLine)}
         </p>
         <OpenBtn type="link" to={`/task/${data.id}`}>
           Відкрити завдання
