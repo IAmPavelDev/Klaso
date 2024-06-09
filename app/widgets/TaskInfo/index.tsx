@@ -182,7 +182,7 @@ export const TaskInfo: FC<{
                         <p>{prev.title}</p>
                         <p>{prev.grade}/100</p>
                       </div>
-                      <p>{prev.created}</p>
+                      <p>{formatDate(prev.created)}</p>
                     </Link>
                   );
                 })}
